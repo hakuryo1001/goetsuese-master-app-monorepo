@@ -1,0 +1,7 @@
+setuptools>=75.0.0
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+pydantic==2.10.3
+pycantonese==3.4.0
+ToJyutping==0.2.3
+wordsegment==1.3.1

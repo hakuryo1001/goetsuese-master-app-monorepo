@@ -1,0 +1,229 @@
+use std::sync::Arc;
+
+use axum::{
+    extract::State,
+    http::StatusCode,
+    response::{IntoResponse, Response},
+    routing::{get, post},
+    Json, Router,
+};
+use mongodb::Client;
+use serde::{Deserialize, Serialize};
+use tower_http::cors::CorsLayer;
+use tracing::error;
+use utoipa::OpenApi;
+use utoipa_swagger_ui::SwaggerUi;
+
+#[derive(Clone)]
+pub struct AppState {
+    pub http: reqwest::Client,
+    /// Base URL of the Python transliteration worker (no trailing slash).
+    pub translit_base: String,
+    pub mongo: Option<Client>,
+}
+
+#[derive(Debug, Deserialize, Serialize, utoipa::ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct TransliterateRequest {
+    pub text: Option<String>,
+    #[serde(default = "default_mode")]
+    pub mode: String,
+    #[serde(default = "default_orthography")]
+    pub orthography: String,
+    #[serde(default = "default_true")]
+    pub use_repeat_char: bool,
+    #[serde(default = "default_initial_r")]
+    pub initial_r_block: String,
+    #[serde(default = "default_v_block")]
+    pub v_block: String,
+    #[serde(default = "default_true")]
+    pub use_schwa_char: bool,
+    #[serde(default = "default_tone")]
+    pub tone_config: String,
+    #[serde(default = "default_algorithm")]
+    pub algorithm: String,
+    #[serde(default = "default_true")]
+    pub sep_eng_words: bool,
+}
+
+fn default_mode() -> String {
+    "font".into()
+}
+fn default_orthography() -> String {
+    "jcz_only".into()
+}
+fn default_true() -> bool {
+    true
+}
+fn default_initial_r() -> String {
+    "wl".into()
+}
+fn default_v_block() -> String {
+    "f".into()
+}
+fn default_tone() -> String {
+    "vertical".into()
+}
+fn default_algorithm() -> String {
+    "PyCantonese".into()
+}
+
+#[derive(Debug, Deserialize, Serialize, utoipa::ToSchema)]
+#[serde(rename_all = "camelCase")]
+pub struct TransliterateResponse {
+    pub translated_text: String,
+}
+
+#[derive(Debug, Serialize)]
+struct ErrorBody {
+    error: String,
+}
+
+pub struct ApiError(pub StatusCode, pub String);
+
+impl IntoResponse for ApiError {
+    fn into_response(self) -> Response {
+        let body = Json(ErrorBody { error: self.1 });
+        (self.0, body).into_response()
+    }
+}
+
+#[utoipa::path(
+    post,
+    path = "/v1/transliterate",
+    request_body = TransliterateRequest,
+    responses(
+        (status = 200, description = "Success", body = TransliterateResponse),
+        (status = 400, description = "Bad request"),
+        (status = 502, description = "Transliteration worker error"),
+    )
+)]
+pub async fn transliterate_handler(
+    State(state): State<Arc<AppState>>,
+    Json(body): Json<TransliterateRequest>,
+) -> Result<Json<TransliterateResponse>, ApiError> {
+    const MAX: usize = 50_000;
+    let text = body.text.as_deref().unwrap_or("");
+    if text.is_empty() {
+        return Err(ApiError(
+            StatusCode::BAD_REQUEST,
+            "text is required".into(),
+        ));
+    }
+    if text.len() > MAX {
+        return Err(ApiError(
+            StatusCode::BAD_REQUEST,
+            format!("text exceeds {MAX} bytes"),
+        ));
+    }
+
+    let url = format!("{}/v1/transliterate", state.translit_base.trim_end_matches('/'));
+    let upstream = state
+        .http
+        .post(&url)
+        .json(&body)
+        .timeout(std::time::Duration::from_secs(120))
+        .send()
+        .await
+        .map_err(|e| {
+            error!(error = %e, "translit request failed");
+            ApiError(
+                StatusCode::BAD_GATEWAY,
+                "transliteration worker unreachable".into(),
+            )
+        })?;
+
+    if !upstream.status().is_success() {
+        let status = upstream.status();
+        let detail = upstream.text().await.unwrap_or_default();
+        error!(%status, %detail, "translit upstream error");
+        return Err(ApiError(
+            StatusCode::BAD_GATEWAY,
+            "transliteration worker returned an error".into(),
+        ));
+    }
+
+    #[derive(Deserialize)]
+    struct UpstreamBody {
+        #[serde(rename = "translatedText")]
+        translated_text: String,
+    }
+
+    let parsed: UpstreamBody = upstream.json().await.map_err(|e| {
+        error!(error = %e, "invalid JSON from translit worker");
+        ApiError(
+            StatusCode::BAD_GATEWAY,
+            "invalid response from transliteration worker".into(),
+        )
+    })?;
+
+    Ok(Json(TransliterateResponse {
+        translated_text: parsed.translated_text,
+    }))
+}
+
+async fn health() -> impl IntoResponse {
+    Json(serde_json::json!({ "status": "ok" }))
+}
+
+async fn ready(State(state): State<Arc<AppState>>) -> impl IntoResponse {
+    let mut ok = true;
+    let mut checks = serde_json::Map::new();
+
+    let turl = format!("{}/health", state.translit_base.trim_end_matches('/'));
+    match state.http.get(&turl).timeout(std::time::Duration::from_secs(5)).send().await {
+        Ok(r) if r.status().is_success() => {
+            checks.insert("transliteration".into(), "ok".into());
+        }
+        Ok(r) => {
+            ok = false;
+            checks.insert(
+                "transliteration".into(),
+                format!("bad status {}", r.status()).into(),
+            );
+        }
+        Err(e) => {
+            ok = false;
+            checks.insert("transliteration".into(), e.to_string().into());
+        }
+    }
+
+    if let Some(ref client) = state.mongo {
+        match client.list_database_names().await {
+            Ok(_) => {
+                checks.insert("mongodb".into(), "ok".into());
+            }
+            Err(e) => {
+                ok = false;
+                checks.insert("mongodb".into(), e.to_string().into());
+            }
+        }
+    } else {
+        checks.insert("mongodb".into(), "skipped".into());
+    }
+
+    let status = if ok {
+        StatusCode::OK
+    } else {
+        StatusCode::SERVICE_UNAVAILABLE
+    };
+
+    (status, Json(serde_json::json!({ "ok": ok, "checks": checks })))
+}
+
+#[derive(OpenApi)]
+#[openapi(
+    paths(transliterate_handler),
+    components(schemas(TransliterateRequest, TransliterateResponse))
+)]
+struct ApiDoc;
+
+pub fn build_router(state: Arc<AppState>, cors: CorsLayer) -> Router {
+    Router::new()
+        .route("/health", get(health))
+        .route("/ready", get(ready))
+        .route("/v1/transliterate", post(transliterate_handler))
+        .merge(SwaggerUi::new("/swagger-ui").url("/openapi.json", ApiDoc::openapi()))
+        .layer(cors)
+        .with_state(state)
+}
