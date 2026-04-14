@@ -41,7 +41,7 @@ export default function Home() {
                 )}
 
                 {item.kind === "external" && (
-                  <div className="mt-auto flex flex-col gap-2 border-t border-line pt-5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+                  <div className="mt-auto flex flex-col items-center justify-center gap-2 border-t border-line pt-5 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-4">
                     {item.links.map((link) =>
                       link.variant === "text" ? (
                         <a

@@ -35,6 +35,7 @@ export default function ThemeToggle() {
 
   const toggle = useCallback(() => {
     setMode((prev) => {
+      if (prev === null) return prev;
       const next: Scheme = prev === "dark" ? "light" : "dark";
       applyToDom(next);
       try {
@@ -53,23 +54,36 @@ export default function ThemeToggle() {
         ? "Switch to dark mode"
         : "Theme";
 
+  const isDark = mode === "dark";
+
   return (
     <button
       type="button"
-      onClick={toggle}
-      className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded border border-line bg-elevated text-ink transition hover:border-line-strong hover:bg-muted"
+      role="switch"
+      aria-checked={mode === null ? false : isDark}
       aria-label={label}
+      disabled={mode === null}
+      onClick={toggle}
+      className="relative h-9 w-16 shrink-0 rounded-full border border-line bg-muted p-[3px] shadow-inner transition-opacity hover:border-line-strong disabled:opacity-50"
     >
-      {mode === null ? (
+      <span
+        className="pointer-events-none absolute inset-[3px] z-[2] flex select-none items-center justify-between px-1"
+        aria-hidden
+      >
         <HiOutlineSun
-          className="h-[1.15rem] w-[1.15rem] text-ink-muted opacity-40"
-          aria-hidden
+          className={`h-3.5 w-3.5 shrink-0 transition-colors ${!isDark && mode !== null ? "text-ink" : "text-ink-muted"}`}
         />
-      ) : mode === "dark" ? (
-        <HiOutlineSun className="h-[1.15rem] w-[1.15rem]" aria-hidden />
-      ) : (
-        <HiOutlineMoon className="h-[1.15rem] w-[1.15rem]" aria-hidden />
-      )}
+        <HiOutlineMoon
+          className={`h-3.5 w-3.5 shrink-0 transition-colors ${isDark ? "text-ink" : "text-ink-muted"}`}
+        />
+      </span>
+
+      <span
+        aria-hidden
+        className={`pointer-events-none absolute top-[3px] z-[1] h-[calc(100%-6px)] w-[44%] rounded-full border border-line bg-elevated shadow transition-[left] duration-200 ease-out ${
+          isDark ? "left-[calc(56%-1px)]" : "left-[3px]"
+        }`}
+      />
     </button>
   );
 }

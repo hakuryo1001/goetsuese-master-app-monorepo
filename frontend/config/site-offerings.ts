@@ -41,18 +41,12 @@ export const siteOfferings: SiteOffering[] = [
     key: "fonts",
     kind: "external",
     title: "字型資源",
-    description:
-      "粵切字部分字形依賴專用字型檔。下載與說明見官方倉庫；概覽與其他資源見 Jyutcitzi 站點。",
+    description: "粵切字部分字形依賴專用字型檔。下載與說明見官方倉庫。",
     links: [
       {
         label: "Jyutcitzi fonts（GitHub）→",
         href: externalUrls.jyutcitziFontsRepo,
         variant: "button",
-      },
-      {
-        label: "jyutcitzi.github.io",
-        href: externalUrls.jyutcitziSite,
-        variant: "text",
       },
     ],
   },
@@ -82,6 +76,15 @@ export const siteOfferings: SiteOffering[] = [
         variant: "button",
       },
     ],
+  },
+  {
+    key: "declaration",
+    kind: "internal",
+    title: "粵字改革宣言",
+    description:
+      "《粵字改革宣言》全文：粵語書面語與文字改革論述；附英文譯本及存檔摘錄。",
+    href: "/declaration",
+    cta: "閱讀全文",
   },
   {
     key: "more",
