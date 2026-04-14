@@ -1,0 +1,12 @@
+# Optional: run only the Python worker in Docker, then `cargo run` from ./backend
+# (backend defaults to http://127.0.0.1:8081).
+#
+#   docker compose up transliteration
+#
+services:
+  transliteration:
+    build:
+      context: .
+      dockerfile: transliteration/Dockerfile
+    ports:
+      - "8081:8081"

@@ -9,7 +9,7 @@ type ToolCardProps = {
 export function ToolCard({ children, className = "" }: ToolCardProps) {
   return (
     <article
-      className={`flex h-full min-h-[11rem] flex-col rounded-lg border border-white/20 bg-black p-6 text-start shadow-lg shadow-black transition-colors duration-100 ease-in hover:border-white/35 ${className}`.trim()}
+      className={`flex h-full min-h-[11rem] flex-col rounded-lg border border-line bg-elevated p-6 text-start shadow-[0_10px_40px_var(--color-card-shadow)] transition-colors duration-100 ease-in hover:border-line-strong ${className}`.trim()}
     >
       {children}
     </article>

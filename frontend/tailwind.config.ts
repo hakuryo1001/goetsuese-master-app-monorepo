@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 
 export default {
+  darkMode: "class",
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -8,6 +9,30 @@ export default {
   ],
   theme: {
     extend: {
+      colors: {
+        canvas: "var(--color-canvas)",
+        elevated: "var(--color-elevated)",
+        muted: "var(--color-muted)",
+        ink: "var(--color-ink)",
+        "ink-muted": "var(--color-ink-muted)",
+        "ink-faint": "var(--color-ink-faint)",
+        line: "var(--color-line)",
+        "line-strong": "var(--color-line-strong)",
+        panel: "var(--color-panel)",
+        "panel-shadow": "var(--color-panel-shadow)",
+        "card-shadow": "var(--color-card-shadow)",
+        "input-bg": "var(--color-input-bg)",
+        "input-ink": "var(--color-input-ink)",
+        "input-border": "var(--color-input-border)",
+        "input-border-focus": "var(--color-input-border-focus)",
+        "output-bg": "var(--color-output-bg)",
+        "output-ink": "var(--color-output-ink)",
+        "output-border": "var(--color-output-border)",
+        "output-shadow": "var(--color-output-shadow)",
+        "alert-bg": "var(--color-alert-bg)",
+        "alert-border": "var(--color-alert-border)",
+        "alert-text": "var(--color-alert-text)",
+      },
       fontFamily: {
         jcz: ["var(--font-jcz)", "ui-serif", "Georgia", "serif"],
       },

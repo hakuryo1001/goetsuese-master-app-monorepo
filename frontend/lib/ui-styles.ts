@@ -3,7 +3,7 @@
  */
 export const uiStyles = {
   outlineButton:
-    "inline-flex w-fit items-center justify-center border border-white px-4 py-2 text-sm font-medium text-white transition hover:bg-white hover:text-black",
+    "inline-flex w-fit items-center justify-center border border-line px-4 py-2 text-sm font-medium text-ink transition hover:bg-ink hover:text-canvas",
   textLink:
-    "inline-flex w-fit text-sm text-white underline underline-offset-4 hover:text-neutral-200",
+    "inline-flex w-fit text-sm text-ink-muted underline underline-offset-4 transition hover:text-ink",
 } as const;

@@ -7,17 +7,18 @@ const apiBase =
   "http://127.0.0.1:8787";
 
 const optionPanel =
-  "m-4 flex flex-wrap gap-x-8 gap-y-4 rounded-lg border border-white/10 bg-neutral-950 p-4 shadow-inner shadow-black/60";
+  "mb-6 flex w-full flex-wrap gap-x-8 gap-y-4 rounded-lg border border-line bg-panel p-4 shadow-[inset_0_2px_14px_var(--color-panel-shadow)]";
 
 const fieldLabel =
-  "mb-1 block text-xs font-semibold uppercase tracking-wide text-neutral-400";
+  "mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-muted";
 
 const choiceRow =
-  "flex cursor-pointer items-center gap-2 text-sm text-white hover:text-neutral-200";
+  "flex cursor-pointer items-center gap-2 text-sm text-ink hover:text-ink-muted";
 
 export default function InstantChoicefulTranslator() {
   const [inputText, setInputText] = useState("");
   const [translatedText, setTranslatedText] = useState("");
+  const [requestError, setRequestError] = useState<string | null>(null);
 
   const [mode, setMode] = useState("font");
   const [orthography, setOrthography] = useState("jcz_only");
@@ -31,9 +32,11 @@ export default function InstantChoicefulTranslator() {
     async (text: string) => {
       if (!text) {
         setTranslatedText("");
+        setRequestError(null);
         return;
       }
       try {
+        setRequestError(null);
         const response = await fetch(`${apiBase}/v1/transliterate`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -48,13 +51,28 @@ export default function InstantChoicefulTranslator() {
             toneConfig,
           }),
         });
+        const raw = await response.text();
+        let payload: { translatedText?: string; error?: string } = {};
+        try {
+          payload = raw ? (JSON.parse(raw) as typeof payload) : {};
+        } catch {
+          payload = {};
+        }
         if (!response.ok) {
-          console.error("Transliterate failed", response.status);
+          const msg =
+            payload.error ||
+            (response.status === 502
+              ? "API 無法連接轉換服務。請在本機啟動 Python worker（uvicorn 8081）及 Rust API（TRANSLIT_SERVICE_URL）。"
+              : `請求失敗（${response.status}）`);
+          setRequestError(msg);
+          setTranslatedText("");
+          console.error("Transliterate failed", response.status, raw.slice(0, 500));
           return;
         }
-        const data: { translatedText?: string } = await response.json();
-        setTranslatedText(data.translatedText ?? "");
+        setTranslatedText(payload.translatedText ?? "");
       } catch (error) {
+        setRequestError("網絡錯誤；請確認 API 位址與服務是否已啟動。");
+        setTranslatedText("");
         console.error("Error:", error);
       }
     },
@@ -80,7 +98,7 @@ export default function InstantChoicefulTranslator() {
     setInputText(e.target.value);
   };
 
-  const accent = "accent-white";
+  const accent = "accent-[var(--color-accent-form)]";
 
   return (
     <div className="w-full">
@@ -235,25 +253,34 @@ export default function InstantChoicefulTranslator() {
         </fieldset>
       </div>
 
-      <div className="mx-4 flex flex-col items-center justify-center gap-8 pb-12 md:flex-row md:items-start">
-        <div className="w-full max-w-[340px] shrink-0">
-          <label className="mb-2 block text-center text-xs font-semibold uppercase tracking-wide text-neutral-400">
+      {requestError && (
+        <p
+          className="mb-4 rounded border border-alert-border bg-alert-bg px-3 py-2 text-sm text-alert-text"
+          role="alert"
+        >
+          {requestError}
+        </p>
+      )}
+
+      <div className="grid w-full grid-cols-1 gap-6 pb-8 md:grid-cols-2 md:items-start">
+        <div className="min-w-0">
+          <label className="mb-2 block text-center text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Input
           </label>
           <textarea
             value={inputText}
-            className="box-border min-h-[220px] w-full resize-y rounded-lg border-2 border-neutral-700 bg-neutral-200 p-3 font-semibold text-black outline-none transition focus:border-white focus:ring-2 focus:ring-white/25"
+            className="box-border min-h-[220px] w-full max-w-full resize-y rounded-lg border-2 border-input-border bg-input-bg p-3 font-semibold text-input-ink outline-none transition focus:border-input-border-focus focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-input-border-focus"
             onChange={handleInputChange}
             placeholder="Enter text to translate"
             spellCheck={false}
           />
         </div>
-        <div className="w-full max-w-[340px] shrink-0">
-          <div className="mb-2 block text-center text-xs font-semibold uppercase tracking-wide text-neutral-400">
+        <div className="min-w-0">
+          <div className="mb-2 block text-center text-xs font-semibold uppercase tracking-wide text-ink-muted">
             Output
           </div>
           <div
-            className="box-border min-h-[220px] w-full whitespace-pre-wrap rounded-lg border border-neutral-800 bg-neutral-950 p-3 font-bold text-white shadow-inner shadow-black/80"
+            className="box-border min-h-[220px] w-full max-w-full whitespace-pre-wrap rounded-lg border border-output-border bg-output-bg p-3 font-bold text-output-ink shadow-[inset_0_2px_12px_var(--color-output-shadow)]"
             aria-live="polite"
           >
             {translatedText}

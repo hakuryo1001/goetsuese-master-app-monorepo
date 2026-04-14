@@ -1,6 +1,6 @@
 use std::{net::SocketAddr, sync::Arc};
 
-use backend::{build_router, AppState};
+use backend::{build_router, translit_spawn, AppState};
 use mongodb::options::ClientOptions;
 use mongodb::Client;
 use reqwest::Client as HttpClient;
@@ -32,10 +32,13 @@ async fn main() -> anyhow::Result<()> {
         .connect_timeout(std::time::Duration::from_secs(10))
         .build()?;
 
+    let translit_child = translit_spawn::ensure_translit_worker(&http, &translit_base).await?;
+
     let state = Arc::new(AppState {
         http,
         translit_base,
         mongo,
+        _translit_worker: translit_child,
     });
 
     let cors = match std::env::var("CORS_ALLOW_ORIGINS") {

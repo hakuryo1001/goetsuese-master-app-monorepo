@@ -27,7 +27,15 @@ pip install -r requirements.txt
 uvicorn main:app --host 127.0.0.1 --port 8081
 ```
 
-Docker (from repo root):
+When **`TRANSLIT_SERVICE_URL` points at loopback** (`127.0.0.1`, `localhost`, or `[::1]`), the Rust API **auto-starts** this worker on startup if `/health` is not already OK. It prefers **`transliteration/.venv/bin/python`** when that file exists (so plain `python3` on your PATH is not used by mistake). Otherwise set **`TRANSLIT_PYTHON`** to a venv interpreter that has `pip install -r requirements.txt` applied. Disable auto-start with `TRANSLIT_AUTO_SPAWN=false` when the worker is a separate container. **`TRANSLIT_DIR`** overrides the `transliteration/` path.
+
+Docker worker only (from repo root):
+
+```bash
+docker compose up transliteration
+```
+
+Image build alone:
 
 ```bash
 docker build -f transliteration/Dockerfile .
@@ -39,6 +47,7 @@ docker build -f transliteration/Dockerfile .
 cd backend
 export TRANSLIT_SERVICE_URL=http://127.0.0.1:8081
 # optional: export MONGODB_URI=...   export CORS_ALLOW_ORIGINS=http://localhost:3000
+# optional: TRANSLIT_AUTO_SPAWN=false   TRANSLIT_PYTHON=/path/to/python3.11
 cargo run
 ```
 

@@ -11,7 +11,7 @@ export default function FontResourcesBlock({
   className = "",
 }: FontResourcesBlockProps) {
   const base =
-    "rounded-lg border border-white/20 bg-neutral-950 text-neutral-300 " +
+    "rounded-lg border border-line bg-panel text-ink-muted " +
     (compact
       ? "mt-5 px-4 py-3 text-sm "
       : "px-5 py-4 text-sm md:text-base ");
@@ -23,12 +23,12 @@ export default function FontResourcesBlock({
     >
       <h2
         id="font-resources-heading"
-        className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-400"
+        className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-muted"
       >
         字型資源
       </h2>
-      <p className="mb-4 leading-relaxed text-neutral-300">
-        粵切字部分字形依賴專用字型檔。下載與說明見官方倉庫；概覽與其他資源見 Jyutcitzi 站點。
+      <p className="mb-4 leading-relaxed text-ink-muted">
+        粵切字部分字形依賴專用字型檔。下載與說明見官方倉庫。
       </p>
       <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
         <a
@@ -38,14 +38,6 @@ export default function FontResourcesBlock({
           className={uiStyles.outlineButton}
         >
           Jyutcitzi fonts（GitHub）→
-        </a>
-        <a
-          href={externalUrls.jyutcitziSite}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={uiStyles.textLink}
-        >
-          jyutcitzi.github.io
         </a>
       </div>
     </aside>

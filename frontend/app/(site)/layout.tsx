@@ -8,12 +8,9 @@ export default function SiteLayout({
   return (
     <>
       <Navbar />
-      <div className="flex min-h-screen place-items-center justify-center bg-black text-white">
-        <div className="container py-6 sm:w-3/4 md:w-3/4 lg:w-3/4 xl:w-1/2">
-          {children}
-        </div>
+      <div className="flex min-h-screen w-full justify-center bg-canvas text-ink">
+        <div className="w-full max-w-6xl px-4 py-6 sm:px-6">{children}</div>
       </div>
-      <Navbar />
     </>
   );
 }

@@ -14,12 +14,15 @@ use tracing::error;
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 
-#[derive(Clone)]
+pub mod translit_spawn;
+
 pub struct AppState {
     pub http: reqwest::Client,
     /// Base URL of the Python transliteration worker (no trailing slash).
     pub translit_base: String,
     pub mongo: Option<Client>,
+    /// When the API auto-starts uvicorn, this keeps the child alive until shutdown.
+    pub _translit_worker: Option<tokio::process::Child>,
 }
 
 #[derive(Debug, Deserialize, Serialize, utoipa::ToSchema)]
@@ -88,6 +91,23 @@ impl IntoResponse for ApiError {
     }
 }
 
+fn summarize_upstream_error(status: reqwest::StatusCode, body: &str) -> String {
+    if let Ok(v) = serde_json::from_str::<serde_json::Value>(body) {
+        if let Some(d) = v.get("detail") {
+            if let Some(s) = d.as_str() {
+                return format!("Transliteration worker {status}: {s}");
+            }
+            return format!("Transliteration worker {status}: {d}");
+        }
+    }
+    let clipped: String = body.chars().take(160).collect();
+    if clipped.is_empty() {
+        format!("Transliteration worker returned HTTP {status}")
+    } else {
+        format!("Transliteration worker HTTP {status}: {clipped}")
+    }
+}
+
 #[utoipa::path(
     post,
     path = "/v1/transliterate",
@@ -126,10 +146,10 @@ pub async fn transliterate_handler(
         .send()
         .await
         .map_err(|e| {
-            error!(error = %e, "translit request failed");
+            error!(error = %e, %url, "translit request failed");
             ApiError(
                 StatusCode::BAD_GATEWAY,
-                "transliteration worker unreachable".into(),
+                format!("transliteration worker unreachable: {e}"),
             )
         })?;
 
@@ -137,10 +157,8 @@ pub async fn transliterate_handler(
         let status = upstream.status();
         let detail = upstream.text().await.unwrap_or_default();
         error!(%status, %detail, "translit upstream error");
-        return Err(ApiError(
-            StatusCode::BAD_GATEWAY,
-            "transliteration worker returned an error".into(),
-        ));
+        let msg = summarize_upstream_error(status, &detail);
+        return Err(ApiError(StatusCode::BAD_GATEWAY, msg));
     }
 
     #[derive(Deserialize)]
