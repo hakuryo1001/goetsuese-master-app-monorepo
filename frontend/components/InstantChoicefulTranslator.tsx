@@ -168,9 +168,9 @@ export default function InstantChoicefulTranslator() {
           <legend className={fieldLabel}>Initial R</legend>
           {(
             [
-              ["r", "ㄖ R"],
-              ["wl", "WL"],
-              ["w", "禾 W"],
+              ["r", " R"],
+              ["wl", " WL"],
+              ["w", " W"],
             ] as const
           ).map(([v, label]) => (
             <label key={v} className={choiceRow}>
