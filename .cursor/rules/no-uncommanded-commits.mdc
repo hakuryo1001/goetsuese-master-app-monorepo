@@ -1,0 +1,12 @@
+---
+description: Never create git commits unless the user explicitly asks
+alwaysApply: true
+---
+
+# No Uncommanded Commits
+
+Never run `git commit` (or any command that creates a commit) unless the user has **explicitly** asked you to commit in that message.
+
+- Staging files (`git add`) is fine as preparation
+- Creating commits is NOT — not as a "convenience", not to "wrap up" a task, not to "save progress"
+- If you believe a commit would be useful, **say so and ask** — do not do it unilaterally
