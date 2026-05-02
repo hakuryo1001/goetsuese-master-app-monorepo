@@ -1,5 +1,5 @@
 # Optional: run only the Python worker in Docker, then `cargo run` from ./backend
-# (backend defaults to http://127.0.0.1:8081).
+# (default TRANSLIT_MODE=local uses http://127.0.0.1:8081; override TRANSLIT_SERVICE_URL if needed).
 #
 #   docker compose up transliteration
 #

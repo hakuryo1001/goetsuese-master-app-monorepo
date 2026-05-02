@@ -1,9 +1,9 @@
-//! Spawn the Python uvicorn worker when targeting loopback and nothing answers /health.
+//! Spawn the Python uvicorn worker when allowed, URL is loopback, and nothing answers /health.
 
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
-use anyhow::{bail, Context};
+use anyhow::{Context, bail};
 use reqwest::Client;
 use tokio::process::Command;
 use tokio::time::sleep;
@@ -27,26 +27,6 @@ fn translit_base_is_loopback(base: &str) -> bool {
     }
 }
 
-pub fn should_auto_spawn(translit_base: &str) -> bool {
-    if !translit_base_is_loopback(translit_base) {
-        return false;
-    }
-    match std::env::var("TRANSLIT_AUTO_SPAWN") {
-        Ok(v) => {
-            let v = v.to_ascii_lowercase();
-            if matches!(v.as_str(), "0" | "false" | "no" | "off") {
-                return false;
-            }
-            if matches!(v.as_str(), "1" | "true" | "yes" | "on") {
-                return true;
-            }
-        }
-        Err(_) => {}
-    }
-    // Default: auto when URL points at loopback (typical local dev).
-    true
-}
-
 fn uvicorn_listen_host(url: &Url) -> String {
     match url.host() {
         Some(url::Host::Ipv4(ip)) if ip.is_loopback() => ip.to_string(),
@@ -57,17 +37,20 @@ fn uvicorn_listen_host(url: &Url) -> String {
 }
 
 fn uvicorn_port(url: &Url) -> u16 {
-    // Default 8081 matches TRANSLIT_SERVICE_URL when no port is given (avoids binding :80 locally).
+    // Default 8081 matches local TRANSLIT_SERVICE_URL and docker-compose / Dockerfile.
     url.port().unwrap_or(8081)
 }
 
-/// `TRANSLIT_PYTHON` if set; else `transliteration/.venv/.../python` when present; else `python3` on PATH.
-fn resolved_python_for_translit(translit_dir: &Path) -> PathBuf {
-    if let Some(p) = std::env::var_os("TRANSLIT_PYTHON") {
-        return PathBuf::from(p);
+/// Prefer `override_python` when set; else `transliteration/.venv/.../python` when present; else `python3` on PATH.
+pub fn resolve_python_executable(translit_dir: &Path, override_python: Option<PathBuf>) -> PathBuf {
+    if let Some(p) = override_python {
+        return p;
     }
     let venv_python = if cfg!(windows) {
-        translit_dir.join(".venv").join("Scripts").join("python.exe")
+        translit_dir
+            .join(".venv")
+            .join("Scripts")
+            .join("python.exe")
     } else {
         translit_dir.join(".venv").join("bin").join("python")
     };
@@ -104,19 +87,38 @@ fn log_python_engine_running(translit_base: &str, started_by_this_api: bool) {
     }
 }
 
-/// If auto-spawn is enabled and `/health` fails, start `uvicorn` and wait until healthy.
+/// If `allow_auto_spawn` and base URL is loopback and `/health` fails, start `uvicorn` and wait until healthy.
+///
+/// When `allow_auto_spawn` is true but the URL is not loopback: best-effort `/health` probe only; **never** returns
+/// `Err` for that case (auto-spawn is best-effort, not guaranteed).
 pub async fn ensure_translit_worker(
     http: &Client,
     translit_base: &str,
+    allow_auto_spawn: bool,
+    translit_dir: PathBuf,
+    translit_python_override: Option<PathBuf>,
 ) -> anyhow::Result<Option<tokio::process::Child>> {
     let base = translit_base.trim_end_matches('/');
     let health_url = format!("{base}/health");
 
-    if !should_auto_spawn(translit_base) {
+    if !allow_auto_spawn {
         if probe_ok(http, &health_url).await {
             info!(
                 target = %base,
                 "Python transliteration engine is running (/health OK; auto-spawn disabled, worker is external)"
+            );
+        }
+        return Ok(None);
+    }
+
+    // allow_auto_spawn == true
+    if !translit_base_is_loopback(base) {
+        if probe_ok(http, &health_url).await {
+            log_python_engine_running(base, false);
+        } else {
+            info!(
+                target = %base,
+                "TRANSLIT_AUTO_SPAWN enabled but base URL is not loopback; skipping local uvicorn (best-effort /health only)"
             );
         }
         return Ok(None);
@@ -131,21 +133,18 @@ pub async fn ensure_translit_worker(
     let host = uvicorn_listen_host(&url);
     let port = uvicorn_port(&url);
 
-    let dir = std::env::var_os("TRANSLIT_DIR")
-        .map(PathBuf::from)
-        .unwrap_or_else(default_translit_dir);
-    let main_py = dir.join("main.py");
+    let main_py = translit_dir.join("main.py");
     if !main_py.is_file() {
         bail!(
-            "transliteration worker is down and auto-spawn cannot run: {} missing (clone submodules; or set TRANSLIT_DIR)",
+            "transliteration worker is down and auto-spawn cannot run: {} missing (clone submodules; or pass translit_dir from TRANSLIT_DIR)",
             main_py.display()
         );
     }
 
-    let python = resolved_python_for_translit(&dir);
+    let python = resolve_python_executable(&translit_dir, translit_python_override);
 
     info!(
-        dir = %dir.display(),
+        dir = %translit_dir.display(),
         python = %python.display(),
         %host,
         %port,
@@ -153,7 +152,7 @@ pub async fn ensure_translit_worker(
     );
 
     let mut cmd = Command::new(&python);
-    cmd.current_dir(&dir)
+    cmd.current_dir(&translit_dir)
         .args([
             "-m",
             "uvicorn",
@@ -172,9 +171,9 @@ pub async fn ensure_translit_worker(
         .spawn()
         .with_context(|| {
             format!(
-                "failed to spawn uvicorn with {} — use Python 3.11+ in transliteration/.venv (see README): cd {} && python3.11 -m venv .venv && .venv/bin/pip install -r requirements.txt; or export TRANSLIT_PYTHON=/path/to/venv/bin/python",
+                "failed to spawn uvicorn with {} — use Python 3.11+ in transliteration/.venv (see README): cd {} && python3.11 -m venv .venv && .venv/bin/pip install -r requirements.txt; or set TRANSLIT_PYTHON",
                 python.display(),
-                dir.display()
+                translit_dir.display()
             )
         })?;
 
@@ -190,6 +189,6 @@ pub async fn ensure_translit_worker(
     bail!(
         "transliteration worker did not become healthy within ~36s ({}). If you saw 'No module named uvicorn', create {} and install requirements.txt (Python 3.11 recommended), or set TRANSLIT_PYTHON.",
         health_url,
-        dir.join(".venv").display()
+        translit_dir.join(".venv").display()
     );
 }
