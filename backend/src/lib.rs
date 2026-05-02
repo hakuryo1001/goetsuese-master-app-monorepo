@@ -7,7 +7,6 @@ use axum::{
     routing::{get, post},
     Json, Router,
 };
-use mongodb::Client;
 use serde::{Deserialize, Serialize};
 use tower_http::cors::CorsLayer;
 use tracing::error;
@@ -20,7 +19,6 @@ pub struct AppState {
     pub http: reqwest::Client,
     /// Base URL of the Python transliteration worker (no trailing slash).
     pub translit_base: String,
-    pub mongo: Option<Client>,
     /// When the API auto-starts uvicorn, this keeps the child alive until shutdown.
     pub _translit_worker: Option<tokio::process::Child>,
 }
@@ -204,20 +202,6 @@ async fn ready(State(state): State<Arc<AppState>>) -> impl IntoResponse {
             ok = false;
             checks.insert("transliteration".into(), e.to_string().into());
         }
-    }
-
-    if let Some(ref client) = state.mongo {
-        match client.list_database_names().await {
-            Ok(_) => {
-                checks.insert("mongodb".into(), "ok".into());
-            }
-            Err(e) => {
-                ok = false;
-                checks.insert("mongodb".into(), e.to_string().into());
-            }
-        }
-    } else {
-        checks.insert("mongodb".into(), "skipped".into());
     }
 
     let status = if ok {

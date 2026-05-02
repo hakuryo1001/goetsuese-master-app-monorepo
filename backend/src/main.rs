@@ -2,8 +2,6 @@ use std::{net::SocketAddr, sync::Arc, time::Duration};
 
 use anyhow::Context;
 use backend::{build_router, translit_spawn, AppState};
-use mongodb::options::ClientOptions;
-use mongodb::Client;
 use reqwest::Client as HttpClient;
 use axum::http::HeaderValue;
 use tower_http::cors::{AllowOrigin, Any, CorsLayer};
@@ -47,14 +45,6 @@ async fn main() -> anyhow::Result<()> {
     let translit_base = std::env::var("TRANSLIT_SERVICE_URL")
         .unwrap_or_else(|_| "http://127.0.0.1:8081".to_string());
 
-    let mongo = match std::env::var("MONGODB_URI") {
-        Ok(uri) if !uri.is_empty() => {
-            let opts = ClientOptions::parse(&uri).await?;
-            Some(Client::with_options(opts)?)
-        }
-        _ => None,
-    };
-
     let http = HttpClient::builder()
         .connect_timeout(std::time::Duration::from_secs(10))
         .build()?;
@@ -83,7 +73,6 @@ async fn main() -> anyhow::Result<()> {
     let state = Arc::new(AppState {
         http,
         translit_base,
-        mongo,
         _translit_worker: translit_child,
     });
 

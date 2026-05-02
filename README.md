@@ -46,7 +46,7 @@ docker build -f transliteration/Dockerfile .
 ```bash
 cd backend
 export TRANSLIT_SERVICE_URL=http://127.0.0.1:8081
-# optional: export MONGODB_URI=...   export CORS_ALLOW_ORIGINS=http://localhost:3000
+# optional: export CORS_ALLOW_ORIGINS=http://localhost:3000
 # optional: TRANSLIT_AUTO_SPAWN=false   TRANSLIT_PYTHON=/path/to/python3.11
 cargo run
 ```
@@ -66,7 +66,7 @@ The stack is three deployable units: Next.js frontend, Axum API, and Python tran
 | Layer | Host | Notes |
 | ----- | ---- | ----- |
 | Frontend | Vercel | Project root **`frontend/`**; set **`NEXT_PUBLIC_API_BASE_URL`** to the public Rust API URL; set **`NEXT_PUBLIC_SITE_URL`** to the site origin for metadata |
-| API | Railway (service 1) | **`PORT`** is honored when **`BIND_ADDR`** is unset; optional **`MONGODB_URI`**, **`CORS_ALLOW_ORIGINS`** |
+| API | Railway (service 1) | **`PORT`** is honored when **`BIND_ADDR`** is unset; optional **`CORS_ALLOW_ORIGINS`** |
 | Transliteration | Railway (service 2) | **Docker** from repo root: `docker build -f transliteration/Dockerfile .`; enable **git submodules** so `transliteration/vendor/jyutcitzi-transliterate` exists at build time |
 
 **Rust API (production) — recommended variables**
