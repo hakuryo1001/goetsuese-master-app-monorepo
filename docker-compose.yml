@@ -6,7 +6,7 @@
 services:
   transliteration:
     build:
-      context: .
-      dockerfile: transliteration/Dockerfile
+      context: ./transliteration
+      dockerfile: Dockerfile
     ports:
       - "8081:8081"
