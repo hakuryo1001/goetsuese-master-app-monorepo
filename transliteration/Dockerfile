@@ -19,4 +19,5 @@ RUN test -d /app/vendor/jyutcitzi-transliterate && \
 ENV PYTHONUNBUFFERED=1
 EXPOSE 8081
 
-CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8081}"]
+# :: accepts Railway private mesh (often IPv6) as well as IPv4 public traffic.
+CMD ["sh", "-c", "uvicorn main:app --host :: --port ${PORT:-8081}"]
