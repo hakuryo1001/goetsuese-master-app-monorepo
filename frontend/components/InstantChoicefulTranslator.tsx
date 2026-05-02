@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useState, type ChangeEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type FocusEvent,
+} from "react";
 
 const apiBase =
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ||
@@ -15,9 +21,15 @@ const fieldLabel =
 const choiceRow =
   "flex cursor-pointer items-center gap-2 text-sm text-ink hover:text-ink-muted";
 
+/** Shown until the user edits the text; then normal live transliteration applies. */
+const DEFAULT_SAMPLE_INPUT =
+  "粵拼，乜唔就係最合宜嘅方案喇咩？jyut ping hai ng co aa。";
+const DEFAULT_SAMPLE_OUTPUT =
+  "粵拼，乜󰀏就係最合宜󱝚方案󰸖󰗞？。";
+
 export default function InstantChoicefulTranslator() {
-  const [inputText, setInputText] = useState("");
-  const [translatedText, setTranslatedText] = useState("");
+  const [inputText, setInputText] = useState(DEFAULT_SAMPLE_INPUT);
+  const [translatedText, setTranslatedText] = useState(DEFAULT_SAMPLE_OUTPUT);
   const [requestError, setRequestError] = useState<string | null>(null);
 
   const [mode, setMode] = useState("font");
@@ -88,6 +100,11 @@ export default function InstantChoicefulTranslator() {
   );
 
   useEffect(() => {
+    if (inputText === DEFAULT_SAMPLE_INPUT) {
+      setTranslatedText(DEFAULT_SAMPLE_OUTPUT);
+      setRequestError(null);
+      return;
+    }
     const id = setTimeout(() => {
       void fetchTranslation(inputText);
     }, 300);
@@ -271,7 +288,6 @@ export default function InstantChoicefulTranslator() {
             value={inputText}
             className="box-border min-h-[220px] w-full max-w-full resize-y rounded-lg border-2 border-input-border bg-input-bg p-3 font-semibold text-input-ink outline-none transition focus:border-input-border-focus focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-input-border-focus"
             onChange={handleInputChange}
-            placeholder="Enter text to translate"
             spellCheck={false}
           />
         </div>
