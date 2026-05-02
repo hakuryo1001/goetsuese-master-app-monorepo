@@ -169,7 +169,7 @@ export default function InstantChoicefulTranslator() {
           {(
             [
               ["r", " R"],
-              ["wl", " WL"],
+              ["wl", " WL"],
               ["w", " W"],
             ] as const
           ).map(([v, label]) => (
