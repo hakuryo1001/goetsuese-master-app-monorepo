@@ -245,9 +245,8 @@ export default function JyutcitziIme() {
           Composition (粵拼)
         </div>
         <div
-          className={`min-h-[2rem] rounded border border-input-border bg-input-bg px-3 py-2 font-semibold ${
-            passthrough ? "text-ink-muted" : "text-input-ink"
-          }`}
+          className={`min-h-[2rem] rounded border border-input-border bg-input-bg px-3 py-2 font-semibold ${passthrough ? "text-ink-muted" : "text-input-ink"
+            }`}
         >
           {passthrough
             ? "… (paused — use Esc or the button to resume Jyutcitzi)"
@@ -264,11 +263,10 @@ export default function JyutcitziIme() {
             Committed text
           </label>
           <span
-            className={`rounded px-2 py-0.5 text-xs font-medium ${
-              passthrough
+            className={`rounded px-2 py-0.5 text-xs font-medium ${passthrough
                 ? "border border-line bg-muted text-ink"
                 : "border border-line bg-elevated text-ink"
-            }`}
+              }`}
           >
             {passthrough ? "Plain typing (system IME)" : "Jyutcitzi"}
           </span>
@@ -328,7 +326,7 @@ export default function JyutcitziIme() {
         <strong className="font-semibold text-ink">Esc</strong> clears 粵拼; when
         the buffer is empty, <strong className="font-semibold text-ink">Esc</strong>{" "}
         toggles <strong className="font-semibold text-ink">plain typing</strong> so
-        your system IME can enter 汉字 in the box below.{" "}
+        your system IME can enter 唐字 in the box below.{" "}
         <strong className="font-semibold text-ink">Esc</strong> again resumes
         Jyutcitzi. Browser-only IME: no server calls. Lexicons are compiled from{" "}
         <a
