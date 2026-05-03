@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 import sys
 import threading
+import traceback
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
@@ -58,6 +59,7 @@ def _run_transliteration(req: TransliterateRequest) -> str:
         prev = os.getcwd()
         try:
             os.chdir(VENDOR_ROOT)
+            # Vendor pipe_transliterator does not accept legacy_web_dots; API keeps legacyWebDots for JSON compat only.
             return pipe_transliterator(
                 req.text,
                 mode=req.mode,
@@ -69,7 +71,6 @@ def _run_transliteration(req: TransliterateRequest) -> str:
                 tone_config=req.toneConfig,
                 algorithm=req.algorithm,
                 sep_eng_words=req.sepEngWords,
-                legacy_web_dots=req.legacyWebDots,
             )
         finally:
             os.chdir(prev)
@@ -87,5 +88,6 @@ def transliterate(req: TransliterateRequest) -> TransliterateResponse:
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
     except Exception as e:
+        traceback.print_exc(file=sys.stderr)
         raise HTTPException(status_code=500, detail="transliteration failed") from e
     return TransliterateResponse(translatedText=out)
