@@ -47,6 +47,8 @@ export default function JyutcitziIme() {
   const [entries, setEntries] = useState<LexEntry[] | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [candidateOffset, setCandidateOffset] = useState(0);
+  /** When true, key events are not intercepted so the system IME can compose in the textarea. */
+  const [passthrough, setPassthrough] = useState(false);
 
   useEffect(() => {
     try {
@@ -118,13 +120,26 @@ export default function JyutcitziIme() {
     [commitText]
   );
 
+  const togglePassthrough = useCallback(() => {
+    setBuffer("");
+    setPassthrough((p) => !p);
+  }, []);
+
   const handleKeyDown = useCallback(
     (ev: KeyboardEvent<HTMLTextAreaElement>) => {
-      if (ev.key === "Escape") {
-        if (buffer) {
+      if (passthrough) {
+        if (ev.key === "Escape") {
           ev.preventDefault();
+          setPassthrough(false);
           setBuffer("");
         }
+        return;
+      }
+
+      if (ev.key === "Escape") {
+        ev.preventDefault();
+        if (buffer) setBuffer("");
+        else setPassthrough(true);
         return;
       }
 
@@ -174,7 +189,7 @@ export default function JyutcitziIme() {
         return;
       }
     },
-    [buffer, candidates, candidateOffset, commitEntry, page]
+    [passthrough, buffer, candidates, candidateOffset, commitEntry, page]
   );
 
   const clearBuffer = () => setBuffer("");
@@ -229,16 +244,50 @@ export default function JyutcitziIme() {
         <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink-muted">
           Composition (粵拼)
         </div>
-        <div className="min-h-[2rem] rounded border border-input-border bg-input-bg px-3 py-2 font-semibold text-input-ink">
-          {buffer || "…"}
+        <div
+          className={`min-h-[2rem] rounded border border-input-border bg-input-bg px-3 py-2 font-semibold ${
+            passthrough ? "text-ink-muted" : "text-input-ink"
+          }`}
+        >
+          {passthrough
+            ? "… (paused — use Esc or the button to resume Jyutcitzi)"
+            : buffer || "…"}
         </div>
       </div>
 
       <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-muted">
-          Committed text
-        </label>
+        <div className="mb-1 flex flex-wrap items-center gap-2">
+          <label
+            htmlFor="jyutcitzi-ime-committed"
+            className="text-xs font-semibold uppercase tracking-wide text-ink-muted"
+          >
+            Committed text
+          </label>
+          <span
+            className={`rounded px-2 py-0.5 text-xs font-medium ${
+              passthrough
+                ? "border border-line bg-muted text-ink"
+                : "border border-line bg-elevated text-ink"
+            }`}
+          >
+            {passthrough ? "Plain typing (system IME)" : "Jyutcitzi"}
+          </span>
+          <button
+            type="button"
+            className="rounded border border-line bg-elevated px-2 py-0.5 text-xs text-ink hover:bg-muted"
+            onClick={togglePassthrough}
+            aria-pressed={passthrough}
+            aria-label={
+              passthrough
+                ? "Switch to Jyutcitzi typing in this field"
+                : "Switch to plain typing for system keyboard IME"
+            }
+          >
+            {passthrough ? "Use Jyutcitzi" : "Use system IME"}
+          </button>
+        </div>
         <textarea
+          id="jyutcitzi-ime-committed"
           ref={taRef}
           rows={10}
           value={committed}
@@ -246,13 +295,22 @@ export default function JyutcitziIme() {
           className="box-border w-full resize-y rounded-lg border-2 border-input-border bg-input-bg p-3 font-semibold text-input-ink outline-none focus:border-input-border-focus"
           spellCheck={false}
           onKeyDown={handleKeyDown}
-          placeholder="Focus here and type Jyutping (e.g. baa1)…"
+          placeholder={
+            passthrough
+              ? "Type here with your Mac input source (Pinyin, Jyutping, …)."
+              : "Focus here and type Jyutping (e.g. baa1). Esc clears 粵拼; when empty, Esc enables plain typing…"
+          }
         />
       </div>
 
       <div className="rounded-lg border border-line bg-elevated p-4">
         <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-muted">
           Candidates (1–9 select · Space / Enter first · ↑↓ page)
+          {passthrough && (
+            <span className="block font-normal normal-case text-ink-muted">
+              — inactive in plain typing mode
+            </span>
+          )}
         </div>
         <ol className="list-decimal space-y-1 pl-5 text-sm">
           {page.map((c, i) => (
@@ -267,7 +325,12 @@ export default function JyutcitziIme() {
       </div>
 
       <p className="text-sm text-ink-muted">
-        Browser-only IME: no server calls. Lexicons are compiled from{" "}
+        <strong className="font-semibold text-ink">Esc</strong> clears 粵拼; when
+        the buffer is empty, <strong className="font-semibold text-ink">Esc</strong>{" "}
+        toggles <strong className="font-semibold text-ink">plain typing</strong> so
+        your system IME can enter 汉字 in the box below.{" "}
+        <strong className="font-semibold text-ink">Esc</strong> again resumes
+        Jyutcitzi. Browser-only IME: no server calls. Lexicons are compiled from{" "}
         <a
           className="underline"
           href="https://github.com/cantonese-jyutcitzi/jyutcitzi-RIME"
