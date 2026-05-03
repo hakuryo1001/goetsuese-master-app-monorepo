@@ -1,3 +1,8 @@
+# Optional (dashboard Variables): RAILWAY_GIT_CLONE_FLAGS=--recursive
+# so the repo snapshot includes git submodules. Not required for this
+# service: transliteration/Dockerfile clones jyutcitzi-transliterate in a
+# build stage when the submodule path would otherwise be empty.
+
 [build]
 builder = "dockerfile"
 dockerfilePath = "Dockerfile"

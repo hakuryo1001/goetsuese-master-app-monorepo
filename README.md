@@ -97,7 +97,7 @@ The stack is three deployable units: Next.js frontend, Axum API, and Python tran
 | ----- | ---- | ----- |
 | Frontend | Vercel | Project root **`frontend/`**; set **`NEXT_PUBLIC_API_BASE_URL`** to the public Rust API URL; set **`NEXT_PUBLIC_SITE_URL`** to the site origin for metadata; IME deploy uses [frontend/vercel.json](frontend/vercel.json) to refresh **jyutcitzi-RIME** to latest `main` before build |
 | API | Railway (service 1) | **`TRANSLIT_MODE=external`**, **`TRANSLIT_SERVICE_URL`** (internal worker URL), **`CORS_ALLOW_ORIGINS`**. **`PORT`** is set by Railway when **`BIND_ADDR`** is unset |
-| Transliteration | Railway (service 2) | **Docker** from repo root: `docker build -f transliteration/Dockerfile .`; enable **git submodules** so `transliteration/vendor/jyutcitzi-transliterate` ([cantonese-jyutcitzi/jyutcitzi-transliterate](https://github.com/cantonese-jyutcitzi/jyutcitzi-transliterate)) and `submodules/*` exist at build time |
+| Transliteration | Railway (service 2) | **Docker** with service **root directory** `transliteration` (see [transliteration/railway.toml](transliteration/railway.toml)). The [transliteration/Dockerfile](transliteration/Dockerfile) **clones** [jyutcitzi-transliterate](https://github.com/cantonese-jyutcitzi/jyutcitzi-transliterate) at a pinned SHA so the image builds even when Railway’s snapshot has an **empty submodule** checkout. Optional: set **`RAILWAY_GIT_CLONE_FLAGS=--recursive`** on this service so the snapshot also populates `vendor/jyutcitzi-transliterate` from git (slightly redundant but fine). When you bump the submodule, update the **`JYUTCITZI_TRANSLITERATE_SHA`** default in that Dockerfile (see comment there). |
 
 **Rust API — required when `TRANSLIT_MODE=external`**
 
@@ -111,6 +111,7 @@ The stack is three deployable units: Next.js frontend, Axum API, and Python tran
 | Variable | Purpose |
 | -------- | ------- |
 | `TRANSLIT_MODE` | `local` (default) or `external`. |
+| `RAILWAY_GIT_CLONE_FLAGS` | (Transliteration Railway service only, optional.) e.g. `--recursive` so clone includes submodules; Dockerfile clone makes this optional. |
 | `TRANSLIT_AUTO_SPAWN` | Overrides default auto-spawn for the mode; invalid non-empty values fail startup. |
 | `REQUIRE_TRANSLIT_HEALTH` | `true` / `1` / `yes` / `on` → exit startup if `GET {TRANSLIT_SERVICE_URL}/health` is not successful. |
 | `BIND_ADDR`, `PORT`, `RUST_LOG`, `TRANSLIT_PYTHON`, `TRANSLIT_DIR` | Listen / logging / spawn paths (see [backend/src/main.rs](backend/src/main.rs)). |
