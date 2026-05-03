@@ -38,6 +38,7 @@ class TransliterateRequest(BaseModel):
     toneConfig: str = "vertical"
     algorithm: str = Field(default="PyCantonese", description="PyCantonese or ToJyutping")
     sepEngWords: bool = True
+    legacyWebDots: bool = False
 
 
 class TransliterateResponse(BaseModel):
@@ -68,6 +69,7 @@ def _run_transliteration(req: TransliterateRequest) -> str:
                 tone_config=req.toneConfig,
                 algorithm=req.algorithm,
                 sep_eng_words=req.sepEngWords,
+                legacy_web_dots=req.legacyWebDots,
             )
         finally:
             os.chdir(prev)

@@ -61,6 +61,7 @@ export default function InstantChoicefulTranslator() {
             vBlock,
             useSchwaChar,
             toneConfig,
+            legacyWebDots: false,
           }),
         });
         const raw = await response.text();

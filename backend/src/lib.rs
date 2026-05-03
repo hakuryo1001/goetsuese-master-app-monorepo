@@ -45,6 +45,8 @@ pub struct TransliterateRequest {
     pub algorithm: String,
     #[serde(default = "default_true")]
     pub sep_eng_words: bool,
+    #[serde(default)]
+    pub legacy_web_dots: bool,
 }
 
 fn default_mode() -> String {
