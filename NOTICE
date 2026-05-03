@@ -1,0 +1,27 @@
+Third-party data sources (online IME lexicon build)
+===================================================
+
+This repository may include or reference the following projects when
+building browser IME lexicons (`npm run ime:build-lexicons`):
+
+1. jyutcitzi-RIME (git submodule: `submodules/jyutcitzi-RIME`)
+   https://github.com/cantonese-jyutcitzi/jyutcitzi-RIME
+   See that repository for license terms.
+
+2. rime-cantonese (git submodule: `submodules/rime-cantonese`)
+   https://github.com/rime/rime-cantonese
+   See that repository for license terms (e.g. CC BY 4.0 for dictionary data).
+
+3. jyutcitzi-transliterate (git submodule: `transliteration/vendor/jyutcitzi-transliterate`)
+   https://github.com/cantonese-jyutcitzi/jyutcitzi-transliterate
+   See that repository for license terms.
+
+The `/tools/ime` page is a separate, browser-only product and does not ship
+the upstream YAML verbatim; it uses compiled binary assets produced locally
+from those sources. The online IME UI may link to upstream READMEs for
+power users.
+
+Build fidelity note (v1): the compiler follows `import_tables` merge order
+from `jyutcitzi_web.dict.yaml` / `jyutcitzi_font.dict.yaml`. Full parity with
+all Rime `use_preset_vocabulary` and preset vocabulary behaviour is not
+guaranteed in v1; see `frontend/scripts/ime/README.md`.

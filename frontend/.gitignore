@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# IME lexicons (run `npm run ime:build-lexicons`; large binaries)
+/public/ime/*.bin
+
 # production
 /build
 

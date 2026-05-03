@@ -38,6 +38,15 @@ export const siteOfferings: SiteOffering[] = [
     cta: "開啟轉換器",
   },
   {
+    key: "ime",
+    kind: "internal",
+    title: "粵切字網上輸入",
+    description:
+      "喺瀏覽器用粵拼組字、選候選、上屏；可切換 Web／Font 字形檔式。唔經伺服器。",
+    href: "/tools/ime",
+    cta: "開啟輸入法",
+  },
+  {
     key: "fonts",
     kind: "external",
     title: "字型資源",
