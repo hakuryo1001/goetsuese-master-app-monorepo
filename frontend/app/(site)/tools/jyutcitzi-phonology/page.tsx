@@ -5,7 +5,7 @@ import JyutcitziPhonologyTables from "@/components/JyutcitziPhonologyTables";
 export const metadata = {
   title: "粵切字改革方案 · 聲母韻母表",
   description:
-    "粵語粵切字改革方案聲母（附 IDC）、韻母對照網格。reference tables—initials with ideographic composition cues; finals show Jyutping and gloss only.",
+    "粵切字改革方案聲母（附 IDC）、韻母對照網格；附 fan1–fan6 補充聲調區位符。Initials plus finals grids and supplementary tone glyphs (private-use Unicode).",
 };
 
 export default function JyutcitziPhonologyPage() {
@@ -31,7 +31,12 @@ export default function JyutcitziPhonologyPage() {
           <span className="mx-1 text-line">｜</span>
           <strong className="font-medium text-ink">韻母</strong>
           ：只標粵拼音節同參照字，唔加 IDC。
-          版面闊螢並排，細螢自動直向疊開。
+          版面自 <strong className="text-ink lg:hidden">細螢縱列</strong>
+          <span className="hidden lg:inline"> <strong className="text-ink">lg</strong> 開度起</span>
+          ，聲母同韻母會橫排並列；下面是 <strong className="font-medium text-ink">聲調補充</strong>
+          （
+          <span className="font-mono text-ink">fan1–fan6</span>
+          專區位符號）。
         </p>
       </header>
 

@@ -216,6 +216,22 @@ export const FINAL_ROWS: FinalsRowSpec[] = [
   },
 ];
 
+/**
+ * Supplementary 「聲調」 glyphs (fan1–fan6 Private Use symbols from the reform infographic).
+ * Render with **`font-jcz`** or the matching bundled font — otherwise placeholders may appear.
+ */
+export const FAN_TONE_MARKS = [
+  { key: "fan1", jyutping: "fan1", codePoint: 0xf0776 },
+  { key: "fan2", jyutping: "fan2", codePoint: 0xf0771 },
+  { key: "fan3", jyutping: "fan3", codePoint: 0xf0772 },
+  { key: "fan4", jyutping: "fan4", codePoint: 0xf0777 },
+  { key: "fan5", jyutping: "fan5", codePoint: 0xf0774 },
+  { key: "fan6", jyutping: "fan6", codePoint: 0xf0775 },
+] as const;
+
+export const FAN_TONE_SUPPLEMENT_NOTE =
+  "呢六個係方案圖對應嘅 Unicode private-use 聲調符；一般要裝粵切字或本計劃字型先可以唔會顯示成豆腐格。";
+
 export const PHONOLOGY_NOTES = {
   initialsNgYaoStar:
     "標「*」嘅格：部件顯示作「ng ⿰〤〤」；「〤〤」係「爻」（粵拼： ngaau4 ）嘅打橫版本，可以用「爻」嚟代替未完全裝嵌嘅粵切字部件。",
