@@ -47,6 +47,15 @@ export const siteOfferings: SiteOffering[] = [
     cta: "開啟輸入法",
   },
   {
+    key: "jyutcitzi-phonology",
+    kind: "internal",
+    title: "粵切字聲母韻母表",
+    description:
+      "改革方案入面聲母（附 IDC）、韻母（粵拼＋參照字）對照網格。唔經伺服器。",
+    href: "/tools/jyutcitzi-phonology",
+    cta: "開啟頁面",
+  },
+  {
     key: "anglicanized-romanisation",
     kind: "internal",
     title: "Anglo Cantonese",
