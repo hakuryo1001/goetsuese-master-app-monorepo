@@ -1,0 +1,636 @@
+{
+  "initials": {
+    "b": "b",
+    "p": "p",
+    "m": "m",
+    "f": "f",
+    "d": "d",
+    "t": "t",
+    "n": "n",
+    "l": "l",
+    "g": "g",
+    "k": "k",
+    "ng": "ng",
+    "h": "h",
+    "gw": "gw",
+    "kw": "kw",
+    "w": "w",
+    "z": "j",
+    "c": "c",
+    "s": "s",
+    "j": "y"
+  },
+  "finals": {
+    "aa": {
+      "romanization": "ar",
+      "approx_english_rhyme_zone": "broad “ah”; like “ah” in father / spa-style",
+      "english_rhymes": [
+        "father",
+        "spa",
+        "bra",
+        "far"
+      ],
+      "notes": ""
+    },
+    "aai": {
+      "romanization": "aai",
+      "approx_english_rhyme_zone": "\"eye\"",
+      "english_rhymes": [
+        "my",
+        "Thai",
+        "fly",
+        "die",
+        "dry",
+        "lie",
+        "sly"
+      ],
+      "notes": ""
+    },
+    "aau": {
+      "romanization": "ow",
+      "approx_english_rhyme_zone": "\"ow\"",
+      "english_rhymes": [
+        "now",
+        "cow",
+        "how"
+      ],
+      "notes": ""
+    },
+    "aam": {
+      "romanization": "arm",
+      "approx_english_rhyme_zone": "\"arm\" + /m/",
+      "english_rhymes": [
+        "balm",
+        "calm",
+        "palm",
+        "arms",
+        "barmy",
+        "farm"
+      ],
+      "notes": ""
+    },
+    "aan": {
+      "romanization": "arn",
+      "approx_english_rhyme_zone": "\"arn\"",
+      "english_rhymes": [
+        "barn",
+        "yarn",
+        "darn"
+      ],
+      "notes": ""
+    },
+    "aang": {
+      "romanization": "ahng",
+      "approx_english_rhyme_zone": "long “ahng”",
+      "english_rhymes": [],
+      "notes": ""
+    },
+    "aap": {
+      "romanization": "arp",
+      "approx_english_rhyme_zone": "\"arp\"",
+      "english_rhymes": [
+        "sharp",
+        "harp",
+        "carp"
+      ],
+      "notes": ""
+    },
+    "aat": {
+      "romanization": "art",
+      "approx_english_rhyme_zone": "\"art\"",
+      "english_rhymes": [
+        "cart",
+        "heart",
+        "start"
+      ],
+      "notes": ""
+    },
+    "aak": {
+      "romanization": "arq",
+      "approx_english_rhyme_zone": "\"ark\"",
+      "english_rhymes": [
+        "bark",
+        "dark",
+        "shark"
+      ],
+      "notes": ""
+    },
+    "a": {
+      "romanization": "a",
+      "approx_english_rhyme_zone": "short “uh”",
+      "english_rhymes": [
+        "cut",
+        "hut",
+        "luck"
+      ],
+      "notes": ""
+    },
+    "ai": {
+      "romanization": "ai",
+      "approx_english_rhyme_zone": "the vowel in “right”; English-style /ai/",
+      "english_rhymes": [],
+      "notes": ""
+    },
+    "au": {
+      "romanization": "ow",
+      "approx_english_rhyme_zone": "\"ow\" (AU diphthong)",
+      "english_rhymes": [
+        "house",
+        "mouse"
+      ],
+      "notes": ""
+    },
+    "am": {
+      "romanization": "um",
+      "approx_english_rhyme_zone": "\"um\"",
+      "english_rhymes": [
+        "sum",
+        "hum",
+        "gum"
+      ],
+      "notes": "e.g. “dimsum”."
+    },
+    "an": {
+      "romanization": "un",
+      "approx_english_rhyme_zone": "\"un\"",
+      "english_rhymes": [
+        "sun",
+        "run",
+        "fun"
+      ],
+      "notes": ""
+    },
+    "ang": {
+      "romanization": "ung",
+      "approx_english_rhyme_zone": "\"ung\"",
+      "english_rhymes": [
+        "sung",
+        "hung",
+        "lung"
+      ],
+      "notes": ""
+    },
+    "ap": {
+      "romanization": "up",
+      "approx_english_rhyme_zone": "\"up\"",
+      "english_rhymes": [
+        "cup",
+        "pup",
+        "sup"
+      ],
+      "notes": ""
+    },
+    "at": {
+      "romanization": "ut",
+      "approx_english_rhyme_zone": "\"ut\"",
+      "english_rhymes": [
+        "cut",
+        "hut",
+        "shut"
+      ],
+      "notes": ""
+    },
+    "ak": {
+      "romanization": "uck",
+      "approx_english_rhyme_zone": "abrupt “uck”",
+      "english_rhymes": [
+        "duck",
+        "luck",
+        "suck"
+      ],
+      "notes": ""
+    },
+    "e": {
+      "romanization": "eh",
+      "approx_english_rhyme_zone": "\"eh\"",
+      "english_rhymes": [
+        "bed",
+        "said",
+        "head"
+      ],
+      "notes": ""
+    },
+    "ei": {
+      "romanization": "ay",
+      "approx_english_rhyme_zone": "\"ay\"",
+      "english_rhymes": [
+        "say",
+        "day",
+        "way"
+      ],
+      "notes": ""
+    },
+    "eu": {
+      "romanization": "el",
+      "approx_english_rhyme_zone": "hard to map; approximate “euhl”",
+      "english_rhymes": [
+        "girl",
+        "pearl",
+        "world"
+      ],
+      "notes": ""
+    },
+    "em": {
+      "romanization": "em",
+      "approx_english_rhyme_zone": "\"em\"",
+      "english_rhymes": [
+        "gem",
+        "stem",
+        "them"
+      ],
+      "notes": ""
+    },
+    "en": {
+      "romanization": "en",
+      "approx_english_rhyme_zone": "\"en\"",
+      "english_rhymes": [
+        "den",
+        "men",
+        "ben"
+      ],
+      "notes": ""
+    },
+    "eng": {
+      "romanization": "eng",
+      "approx_english_rhyme_zone": "\"eng\"",
+      "english_rhymes": [
+        "length",
+        "strength",
+        "tenth"
+      ],
+      "notes": ""
+    },
+    "ep": {
+      "romanization": "ep",
+      "approx_english_rhyme_zone": "\"ep\"",
+      "english_rhymes": [
+        "step",
+        "kept",
+        "slept"
+      ],
+      "notes": ""
+    },
+    "et": {
+      "romanization": "et",
+      "approx_english_rhyme_zone": "\"et\"",
+      "english_rhymes": [
+        "get",
+        "set",
+        "met"
+      ],
+      "notes": ""
+    },
+    "ek": {
+      "romanization": "eck",
+      "approx_english_rhyme_zone": "\"eck\"",
+      "english_rhymes": [
+        "deck",
+        "neck",
+        "check"
+      ],
+      "notes": ""
+    },
+    "i": {
+      "romanization": "ee",
+      "approx_english_rhyme_zone": "\"ee\"",
+      "english_rhymes": [
+        "see",
+        "free",
+        "tree"
+      ],
+      "notes": "e.g. “laisée” / laisee."
+    },
+    "iu": {
+      "romanization": "iu",
+      "approx_english_rhyme_zone": "\"ew\"",
+      "english_rhymes": [
+        "few",
+        "new",
+        "blue"
+      ],
+      "notes": "e.g. diunei (“a tip”)."
+    },
+    "im": {
+      "romanization": "im",
+      "approx_english_rhyme_zone": "\"eem\"",
+      "english_rhymes": [
+        "dream",
+        "cream",
+        "beam"
+      ],
+      "notes": "e.g. “dimsum”."
+    },
+    "in": {
+      "romanization": "in",
+      "approx_english_rhyme_zone": "\"een\"",
+      "english_rhymes": [
+        "seen",
+        "green",
+        "bean"
+      ],
+      "notes": ""
+    },
+    "ing": {
+      "romanization": "ing",
+      "approx_english_rhyme_zone": "\"ing\"",
+      "english_rhymes": [
+        "sing",
+        "king",
+        "ring"
+      ],
+      "notes": ""
+    },
+    "ip": {
+      "romanization": "eep",
+      "approx_english_rhyme_zone": "\"eep\" (clipped)",
+      "english_rhymes": [
+        "deep",
+        "keep",
+        "sleep"
+      ],
+      "notes": ""
+    },
+    "it": {
+      "romanization": "eet",
+      "approx_english_rhyme_zone": "\"eat\" (clipped)",
+      "english_rhymes": [
+        "beat",
+        "seat",
+        "heat"
+      ],
+      "notes": "e.g. yeet hay (yeethay)."
+    },
+    "ik": {
+      "romanization": "eek",
+      "approx_english_rhyme_zone": "\"eek\" (clipped)",
+      "english_rhymes": [
+        "seek",
+        "peak",
+        "leak"
+      ],
+      "notes": ""
+    },
+    "o": {
+      "romanization": "oor",
+      "approx_english_rhyme_zone": "British “or\"",
+      "english_rhymes": [
+        "more",
+        "floor",
+        "door"
+      ],
+      "notes": ""
+    },
+    "oi": {
+      "romanization": "oi",
+      "approx_english_rhyme_zone": "\"oy\"",
+      "english_rhymes": [
+        "boy",
+        "toy",
+        "joy"
+      ],
+      "notes": "e.g. “bakchoy”. "
+    },
+    "ou": {
+      "romanization": "oh",
+      "approx_english_rhyme_zone": "close “oh\"",
+      "english_rhymes": [
+        "go",
+        "show",
+        "low"
+      ],
+      "notes": ""
+    },
+    "on": {
+      "romanization": "on",
+      "approx_english_rhyme_zone": "\"on\"",
+      "english_rhymes": [
+        "gone",
+        "dawn",
+        "yawn"
+      ],
+      "notes": ""
+    },
+    "ong": {
+      "romanization": "ong",
+      "approx_english_rhyme_zone": "\"ong\"",
+      "english_rhymes": [
+        "song",
+        "long",
+        "strong"
+      ],
+      "notes": ""
+    },
+    "ot": {
+      "romanization": "ot",
+      "approx_english_rhyme_zone": "\"ot\"",
+      "english_rhymes": [
+        "hot",
+        "spot",
+        "not"
+      ],
+      "notes": ""
+    },
+    "op": {
+      "romanization": "op",
+      "approx_english_rhyme_zone": "\"op\"",
+      "english_rhymes": [
+        "hop",
+        "stop",
+        "drop"
+      ],
+      "notes": ""
+    },
+    "ok": {
+      "romanization": "ock",
+      "approx_english_rhyme_zone": "\"ock\"",
+      "english_rhymes": [
+        "rock",
+        "lock",
+        "sock"
+      ],
+      "notes": ""
+    },
+    "u": {
+      "romanization": "oo",
+      "approx_english_rhyme_zone": "\"oo\" (moon)",
+      "english_rhymes": [
+        "moon",
+        "blue",
+        "food"
+      ],
+      "notes": ""
+    },
+    "ui": {
+      "romanization": "ui",
+      "approx_english_rhyme_zone": "\"ooey\"",
+      "english_rhymes": [
+        "gooey",
+        "chewy",
+        "buoy"
+      ],
+      "notes": ""
+    },
+    "un": {
+      "romanization": "oon",
+      "approx_english_rhyme_zone": "\"oon\"",
+      "english_rhymes": [
+        "moon",
+        "spoon",
+        "tune"
+      ],
+      "notes": ""
+    },
+    "ung": {
+      "romanization": "ung",
+      "approx_english_rhyme_zone": "\"oong\"",
+      "english_rhymes": [
+        "drone",
+        "cone",
+        "own",
+        "phone",
+        "moan"
+      ],
+      "notes": ""
+    },
+    "ut": {
+      "romanization": "oot",
+      "approx_english_rhyme_zone": "\"oot\" (clipped)",
+      "english_rhymes": [
+        "foot",
+        "put",
+        "soot"
+      ],
+      "notes": ""
+    },
+    "uk": {
+      "romanization": "ook",
+      "approx_english_rhyme_zone": "\"ook\" (clipped)",
+      "english_rhymes": [
+        "book",
+        "look",
+        "cook"
+      ],
+      "notes": ""
+    },
+    "eoi": {
+      "romanization": "eoi",
+      "approx_english_rhyme_zone": "hard to pin; vaguely French/German-like rounded",
+      "english_rhymes": [
+        "bird",
+        "word",
+        "heard"
+      ],
+      "notes": ""
+    },
+    "eon": {
+      "romanization": "urn",
+      "approx_english_rhyme_zone": "rounded “urn\"",
+      "english_rhymes": [
+        "burn",
+        "turn",
+        "fern"
+      ],
+      "notes": ""
+    },
+    "eot": {
+      "romanization": "urt",
+      "approx_english_rhyme_zone": "rounded “urt\"",
+      "english_rhymes": [
+        "hurt",
+        "shirt",
+        "flirt"
+      ],
+      "notes": ""
+    },
+    "oe": {
+      "romanization": "ir",
+      "approx_english_rhyme_zone": "German/French rounded vowel (fur-like)",
+      "english_rhymes": [
+        "sir",
+        "fur",
+        "blur"
+      ],
+      "notes": ""
+    },
+    "oeng": {
+      "romanization": "earn",
+      "approx_english_rhyme_zone": "\"erng\"",
+      "english_rhymes": [
+        "burn",
+        "fern",
+        "learn"
+      ],
+      "notes": ""
+    },
+    "oet": {
+      "romanization": "urt",
+      "approx_english_rhyme_zone": "\"urt\"",
+      "english_rhymes": [
+        "hurt",
+        "skirt",
+        "shirt"
+      ],
+      "notes": ""
+    },
+    "oek": {
+      "romanization": "irk",
+      "approx_english_rhyme_zone": "\"irk\"",
+      "english_rhymes": [
+        "work",
+        "jerk",
+        "clerk"
+      ],
+      "notes": ""
+    },
+    "yu": {
+      "romanization": "uu",
+      "approx_english_rhyme_zone": "French “u” / German “ü”",
+      "english_rhymes": [
+        "few",
+        "cute",
+        "music"
+      ],
+      "notes": ""
+    },
+    "yun": {
+      "romanization": "uun",
+      "approx_english_rhyme_zone": "rounded “tune\"",
+      "english_rhymes": [
+        "tune",
+        "dune",
+        "June"
+      ],
+      "notes": ""
+    },
+    "yut": {
+      "romanization": "uut",
+      "approx_english_rhyme_zone": "rounded “cute” (clipped)",
+      "english_rhymes": [
+        "cute",
+        "mute",
+        "dispute"
+      ],
+      "notes": ""
+    },
+    "m": {
+      "romanization": "mm",
+      "approx_english_rhyme_zone": "syllabic “mm\"",
+      "english_rhymes": [
+        "hmm",
+        "mm-hmm",
+        "mmm"
+      ],
+      "notes": ""
+    },
+    "ng": {
+      "romanization": "ng",
+      "approx_english_rhyme_zone": "syllabic “ng\"",
+      "english_rhymes": [
+        "sung",
+        "hung",
+        "lung"
+      ],
+      "notes": ""
+    }
+  }
+}

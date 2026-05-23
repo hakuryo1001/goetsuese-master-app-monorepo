@@ -47,6 +47,15 @@ export const siteOfferings: SiteOffering[] = [
     cta: "開啟輸入法",
   },
   {
+    key: "anglicanized-romanisation",
+    kind: "internal",
+    title: "Anglo Cantonese",
+    description:
+      "Anglo Cantonese：以英語讀音習慣拼寫粵語嘅羅馬字方案；適合母語係英文嘅讀者學發音同日用品讀標註。（內容陸續補充。）",
+    href: "/tools/anglicanized-romanisation",
+    cta: "開啟頁面",
+  },
+  {
     key: "fonts",
     kind: "external",
     title: "字型資源",
