@@ -9,67 +9,43 @@ import {
   type KeyboardEvent,
 } from "react";
 
-import { decodeLexicon, type LexEntry } from "@/lib/ime/decodeLexicon";
-import { prefixCandidates } from "@/lib/ime/lookup";
 import {
-  IME_PROFILE_STORAGE_KEY,
-  LEXICON_URL,
-  type ImeProfile,
-} from "@/lib/ime/profile";
+  isKnownSyllable,
+  loadNaturalLexicon,
+  prefixCandidates,
+  type NaturalCandidate,
+  type NaturalLexicon,
+} from "@/lib/natural-jyutping";
 
 const MAX_CANDIDATES = 50;
 const PAGE_SIZE = 9;
 
 const JYUTPING_KEY = /^[a-z0-9]$/i;
 
-const lexCache: Partial<Record<ImeProfile, LexEntry[]>> = {};
+let lexCache: NaturalLexicon | null = null;
 
-async function loadLexicon(profile: ImeProfile): Promise<LexEntry[]> {
-  if (lexCache[profile]) return lexCache[profile]!;
-  const url = LEXICON_URL[profile];
-  const res = await fetch(url, { cache: "force-cache" });
-  if (!res.ok) {
-    throw new Error(
-      `Could not load ${url} (${res.status}). Run \`npm run ime:build-lexicons\` in frontend/.`
-    );
-  }
-  const buf = await res.arrayBuffer();
-  const entries = decodeLexicon(buf);
-  lexCache[profile] = entries;
-  return entries;
+async function loadLexicon(): Promise<NaturalLexicon> {
+  if (lexCache) return lexCache;
+  lexCache = await loadNaturalLexicon();
+  return lexCache;
 }
 
-export default function JyutcitziIme() {
+export default function NaturalJyutpingIme() {
   const taRef = useRef<HTMLTextAreaElement>(null);
   const [committed, setCommitted] = useState("");
-  const [profile, setProfile] = useState<ImeProfile>("font");
   const [buffer, setBuffer] = useState("");
-  const [entries, setEntries] = useState<LexEntry[] | null>(null);
+  const [lexicon, setLexicon] = useState<NaturalLexicon | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [candidateOffset, setCandidateOffset] = useState(0);
-  /** When true, key events are not intercepted so the system IME can compose in the textarea. */
   const [passthrough, setPassthrough] = useState(false);
-
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(IME_PROFILE_STORAGE_KEY);
-      if (raw === "web" || raw === "font") setProfile(raw);
-    } catch {
-      /* ignore */
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem(IME_PROFILE_STORAGE_KEY, profile);
-  }, [profile]);
 
   useEffect(() => {
     let cancelled = false;
     setLoadError(null);
-    setEntries(null);
-    loadLexicon(profile)
-      .then((e) => {
-        if (!cancelled) setEntries(e);
+    setLexicon(null);
+    loadLexicon()
+      .then((lex) => {
+        if (!cancelled) setLexicon(lex);
       })
       .catch((err: unknown) => {
         if (!cancelled)
@@ -78,12 +54,12 @@ export default function JyutcitziIme() {
     return () => {
       cancelled = true;
     };
-  }, [profile]);
+  }, []);
 
   const candidates = useMemo(() => {
-    if (!entries || !buffer) return [];
-    return prefixCandidates(entries, buffer, MAX_CANDIDATES);
-  }, [entries, buffer]);
+    if (!lexicon || !buffer) return [];
+    return prefixCandidates(lexicon, buffer, MAX_CANDIDATES);
+  }, [lexicon, buffer]);
 
   const page = useMemo(
     () => candidates.slice(candidateOffset, candidateOffset + PAGE_SIZE),
@@ -92,7 +68,7 @@ export default function JyutcitziIme() {
 
   useEffect(() => {
     setCandidateOffset(0);
-  }, [buffer, profile]);
+  }, [buffer]);
 
   const commitText = useCallback((text: string) => {
     const ta = taRef.current;
@@ -112,9 +88,9 @@ export default function JyutcitziIme() {
     });
   }, [committed]);
 
-  const commitEntry = useCallback(
-    (e: LexEntry) => {
-      commitText(e.text);
+  const commitCandidate = useCallback(
+    (c: NaturalCandidate) => {
+      commitText(c.glyph);
       setBuffer("");
     },
     [commitText]
@@ -154,12 +130,12 @@ export default function JyutcitziIme() {
       if (buffer.length > 0) {
         if (ev.key === " " && candidates.length > 0) {
           ev.preventDefault();
-          commitEntry(candidates[0]);
+          commitCandidate(candidates[0]);
           return;
         }
         if (ev.key === "Enter" && candidates.length > 0) {
           ev.preventDefault();
-          commitEntry(candidates[0]);
+          commitCandidate(candidates[0]);
           return;
         }
         const d = ev.key;
@@ -167,7 +143,7 @@ export default function JyutcitziIme() {
           const idx = parseInt(d, 10) - 1;
           if (idx >= 0 && idx < page.length) {
             ev.preventDefault();
-            commitEntry(page[idx]);
+            commitCandidate(page[idx]);
             return;
           }
         }
@@ -189,46 +165,30 @@ export default function JyutcitziIme() {
         return;
       }
     },
-    [passthrough, buffer, candidates, candidateOffset, commitEntry, page]
+    [passthrough, buffer, candidates, candidateOffset, commitCandidate, page]
   );
 
-  const clearBuffer = () => setBuffer("");
-
-  const profileClass =
-    profile === "font" ? "font-jcz" : "font-mono text-[15px] leading-relaxed";
+  const emptyMessage = useMemo(() => {
+    if (!buffer || !lexicon) return null;
+    if (candidates.length > 0) return null;
+    if (isKnownSyllable(lexicon, buffer)) {
+      return "Known syllable — no glyphs filled yet.";
+    }
+    return "No matching syllable.";
+  }, [buffer, lexicon, candidates.length]);
 
   return (
-    <div className={`w-full space-y-4 ${profileClass}`}>
+    <div className="w-full space-y-4 font-jcz">
       <div className="flex flex-wrap items-center gap-4 rounded-lg border border-line bg-panel p-4">
-        <fieldset className="border-0 p-0">
-          <legend className="mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-muted">
-            Output profile
-          </legend>
-          <div className="flex gap-4 text-sm">
-            <label className="flex cursor-pointer items-center gap-2">
-              <input
-                type="radio"
-                name="ime-profile"
-                checked={profile === "font"}
-                onChange={() => setProfile("font")}
-              />
-              Font
-            </label>
-            <label className="flex cursor-pointer items-center gap-2">
-              <input
-                type="radio"
-                name="ime-profile"
-                checked={profile === "web"}
-                onChange={() => setProfile("web")}
-              />
-              Web
-            </label>
-          </div>
-        </fieldset>
+        {lexicon && (
+          <p className="text-sm text-ink-muted">
+            {lexicon.filledCount} / {lexicon.keys.length} syllables with glyphs
+          </p>
+        )}
         <button
           type="button"
           className="rounded border border-line bg-elevated px-3 py-1.5 text-sm text-ink hover:bg-muted"
-          onClick={clearBuffer}
+          onClick={() => setBuffer("")}
         >
           Clear buffer
         </button>
@@ -245,11 +205,12 @@ export default function JyutcitziIme() {
           Composition (粵拼)
         </div>
         <div
-          className={`min-h-[2rem] rounded border border-input-border bg-input-bg px-3 py-2 font-semibold ${passthrough ? "text-ink-muted" : "text-input-ink"
-            }`}
+          className={`min-h-[2rem] rounded border border-input-border bg-input-bg px-3 py-2 font-semibold ${
+            passthrough ? "text-ink-muted" : "text-input-ink"
+          }`}
         >
           {passthrough
-            ? "… (paused — use Esc or the button to resume Jyutcitzi)"
+            ? "… (paused — use Esc or the button to resume)"
             : buffer || "…"}
         </div>
       </div>
@@ -257,18 +218,19 @@ export default function JyutcitziIme() {
       <div>
         <div className="mb-1 flex flex-wrap items-center gap-2">
           <label
-            htmlFor="jyutcitzi-ime-committed"
+            htmlFor="natural-jyutping-ime-committed"
             className="text-xs font-semibold uppercase tracking-wide text-ink-muted"
           >
             Committed text
           </label>
           <span
-            className={`rounded px-2 py-0.5 text-xs font-medium ${passthrough
-              ? "border border-line bg-muted text-ink"
-              : "border border-line bg-elevated text-ink"
-              }`}
+            className={`rounded px-2 py-0.5 text-xs font-medium ${
+              passthrough
+                ? "border border-line bg-muted text-ink"
+                : "border border-line bg-elevated text-ink"
+            }`}
           >
-            {passthrough ? "Plain typing (system IME)" : "Jyutcitzi"}
+            {passthrough ? "Plain typing (system IME)" : "Natural Jyutcitzi"}
           </span>
           <button
             type="button"
@@ -277,15 +239,15 @@ export default function JyutcitziIme() {
             aria-pressed={passthrough}
             aria-label={
               passthrough
-                ? "Switch to Jyutcitzi typing in this field"
+                ? "Switch to natural Jyutping typing in this field"
                 : "Switch to plain typing for system keyboard IME"
             }
           >
-            {passthrough ? "Use Jyutcitzi" : "Use system IME"}
+            {passthrough ? "Use natural Jyutping" : "Use system IME"}
           </button>
         </div>
         <textarea
-          id="jyutcitzi-ime-committed"
+          id="natural-jyutping-ime-committed"
           ref={taRef}
           rows={10}
           value={committed}
@@ -312,42 +274,23 @@ export default function JyutcitziIme() {
         </div>
         <ol className="list-decimal space-y-1 pl-5 text-sm">
           {page.map((c, i) => (
-            <li key={`${candidateOffset + i}-${c.code}-${c.text}`}>
-              <span className="text-ink-muted">{c.code}</span> → {c.text}
+            <li key={`${candidateOffset + i}-${c.syllable}-${c.glyph}-${c.index}`}>
+              <span className="text-ink-muted">{c.syllable}</span> → {c.glyph}
             </li>
           ))}
         </ol>
-        {candidates.length === 0 && buffer && (
-          <p className="text-sm text-ink-muted">No matches.</p>
+        {emptyMessage && (
+          <p className="text-sm text-ink-muted">{emptyMessage}</p>
         )}
       </div>
 
       <p className="text-sm text-ink-muted">
-        <strong className="font-semibold text-ink">Esc</strong> clears 粵拼; when
-        the buffer is empty, <strong className="font-semibold text-ink">Esc</strong>{" "}
-        toggles <strong className="font-semibold text-ink">plain typing</strong> so
-        your system IME can enter 唐字 in the box below.{" "}
-        <strong className="font-semibold text-ink">Esc</strong> again resumes
-        Jyutcitzi. Browser-only IME: no server calls. Lexicons are compiled from{" "}
-        <a
-          className="underline"
-          href="https://github.com/cantonese-jyutcitzi/jyutcitzi-RIME"
-          target="_blank"
-          rel="noreferrer"
-        >
-          jyutcitzi-RIME
-        </a>{" "}
-        and{" "}
-        <a
-          className="underline"
-          href="https://github.com/rime/rime-cantonese"
-          target="_blank"
-          rel="noreferrer"
-        >
-          rime-cantonese
+        Browser-only: type 粵拼, pick natural reform glyphs, commit to the box.
+        Tone digits are ignored for lookup. For IDC-encoded 粵切字 input see{" "}
+        <a className="underline" href="/tools/ime">
+          粵切字網上輸入
         </a>
-        . See repository <code className="rounded bg-muted px-1">NOTICE</code> and{" "}
-        <code className="rounded bg-muted px-1">frontend/scripts/ime/README.md</code>.
+        .
       </p>
     </div>
   );

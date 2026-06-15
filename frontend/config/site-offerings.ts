@@ -47,6 +47,15 @@ export const siteOfferings: SiteOffering[] = [
     cta: "開啟輸入法",
   },
   {
+    key: "natural-jyutping",
+    kind: "internal",
+    title: "天然生成粵切字",
+    description:
+      "用粵拼搵自然粵切字、選候選、上屏；同編碼版輸入法分開，瀏覽器內完成。",
+    href: "/tools/natural-jyutping",
+    cta: "開啟輸入",
+  },
+  {
     key: "jyutcitzi-phonology",
     kind: "internal",
     title: "粵切字聲母韻母表",
