@@ -35,6 +35,15 @@ export default {
       },
       fontFamily: {
         jcz: ["var(--font-jcz)", "ui-serif", "Georgia", "serif"],
+        "babel-stone": ["var(--font-babel-stone)", "ui-serif", "Georgia", "serif"],
+        /** BabelStoneHan for natural glyphs; Jyutcitzi font for reform PUA fallback. */
+        "natural-jyutcitzi": [
+          "var(--font-babel-stone)",
+          "var(--font-jcz)",
+          "ui-serif",
+          "Georgia",
+          "serif",
+        ],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

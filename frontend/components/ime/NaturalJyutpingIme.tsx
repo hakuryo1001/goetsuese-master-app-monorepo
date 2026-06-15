@@ -10,6 +10,7 @@ import {
 } from "react";
 
 import {
+  clearNaturalLexiconCache,
   isKnownSyllable,
   loadNaturalLexicon,
   prefixCandidates,
@@ -22,13 +23,6 @@ const PAGE_SIZE = 9;
 
 const JYUTPING_KEY = /^[a-z0-9]$/i;
 
-let lexCache: NaturalLexicon | null = null;
-
-async function loadLexicon(): Promise<NaturalLexicon> {
-  if (lexCache) return lexCache;
-  lexCache = await loadNaturalLexicon();
-  return lexCache;
-}
 
 export default function NaturalJyutpingIme() {
   const taRef = useRef<HTMLTextAreaElement>(null);
@@ -43,7 +37,8 @@ export default function NaturalJyutpingIme() {
     let cancelled = false;
     setLoadError(null);
     setLexicon(null);
-    loadLexicon()
+    clearNaturalLexiconCache();
+    loadNaturalLexicon()
       .then((lex) => {
         if (!cancelled) setLexicon(lex);
       })
@@ -178,7 +173,7 @@ export default function NaturalJyutpingIme() {
   }, [buffer, lexicon, candidates.length]);
 
   return (
-    <div className="w-full space-y-4 font-jcz">
+    <div className="w-full space-y-4">
       <div className="flex flex-wrap items-center gap-4 rounded-lg border border-line bg-panel p-4">
         {lexicon && (
           <p className="text-sm text-ink-muted">

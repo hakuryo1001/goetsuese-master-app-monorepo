@@ -1,7 +1,10 @@
 import { buildIndexes } from "./buildIndexes";
 import type { CharactersMap, NaturalLexicon } from "./types";
 
-export const CHARACTERS_URL = "/natural-jyutping/characters.json";
+export const CHARACTERS_URL = "/natural-jyutcitzi/characters.json";
+
+/** Bump when characters.json changes to bypass stale browser caches. */
+export const CHARACTERS_LEXICON_VERSION = "2025-06-16-li";
 
 let cached: NaturalLexicon | null = null;
 
@@ -27,13 +30,18 @@ function validateMap(data: unknown): CharactersMap {
   return map;
 }
 
-/** Fetch characters.json and build indexes (cached after first load). */
+function lexiconFetchUrl(base = CHARACTERS_URL): string {
+  const sep = base.includes("?") ? "&" : "?";
+  return `${base}${sep}v=${CHARACTERS_LEXICON_VERSION}`;
+}
+
+/** Fetch characters.json and build indexes (cached in-memory for this session). */
 export async function loadNaturalLexicon(
   url = CHARACTERS_URL
 ): Promise<NaturalLexicon> {
   if (cached) return cached;
 
-  const res = await fetch(url, { cache: "force-cache" });
+  const res = await fetch(lexiconFetchUrl(url), { cache: "no-store" });
   if (!res.ok) {
     throw new Error(`Could not load ${url} (${res.status})`);
   }
