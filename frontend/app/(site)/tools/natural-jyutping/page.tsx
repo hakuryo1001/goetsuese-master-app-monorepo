@@ -4,6 +4,7 @@ import Link from "next/link";
 import NaturalJyutpingIme from "@/components/ime/NaturalJyutpingIme";
 import NaturalJyutcitziExamples from "@/components/natural-jyutping/NaturalJyutcitziExamples";
 import { babelStoneHan } from "@/lib/fonts/babel-stone-han";
+import { hanaMinA, hanaMinB } from "@/lib/fonts/hana-min";
 
 export const metadata: Metadata = {
   title: "天然生成粵切字 · Natural Jyutping Typer",
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 export default function NaturalJyutpingToolPage() {
   return (
     <div
-      className={`w-full font-natural-jyutcitzi ${babelStoneHan.variable}`}
+      className={`w-full font-natural-jyutcitzi ${hanaMinA.variable} ${hanaMinB.variable} ${babelStoneHan.variable}`}
     >
       <nav className="mb-6 text-center">
         <Link

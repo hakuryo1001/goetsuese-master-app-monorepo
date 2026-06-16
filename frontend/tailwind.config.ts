@@ -36,8 +36,17 @@ export default {
       fontFamily: {
         jcz: ["var(--font-jcz)", "ui-serif", "Georgia", "serif"],
         "babel-stone": ["var(--font-babel-stone)", "ui-serif", "Georgia", "serif"],
-        /** BabelStoneHan for natural glyphs; Jyutcitzi font for reform PUA fallback. */
+        /** HanaMinA+B for rare hanzi; BabelStoneHan for natural glyphs; Jyutcitzi for reform PUA. */
+        "hana-min": [
+          "var(--font-hana-min-a)",
+          "var(--font-hana-min-b)",
+          "ui-serif",
+          "Georgia",
+          "serif",
+        ],
         "natural-jyutcitzi": [
+          "var(--font-hana-min-a)",
+          "var(--font-hana-min-b)",
           "var(--font-babel-stone)",
           "var(--font-jcz)",
           "ui-serif",

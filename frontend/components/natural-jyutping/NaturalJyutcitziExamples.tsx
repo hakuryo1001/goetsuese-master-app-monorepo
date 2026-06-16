@@ -22,7 +22,7 @@ function ExampleCard({
           <div className="text-[0.65rem] font-semibold uppercase tracking-wide text-ink-muted">
             粵切字
           </div>
-          <div className="text-xl leading-none text-ink">{jyutcitzi}</div>
+          <div className="text-xl leading-none font-jcz text-ink">{jyutcitzi}</div>
         </div>
         <div className="space-y-1">
           <div className="text-[0.65rem] font-semibold uppercase tracking-wide text-ink-muted">
