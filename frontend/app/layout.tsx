@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Suspense } from "react";
 
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import ThemeInlineScript from "@/components/ThemeInlineScript";
@@ -96,7 +97,9 @@ export default function RootLayout({
         <ThemeInlineScript />
       </head>
       <body className={jczFont.variable}>
-        <GoogleAnalytics measurementId={gaMeasurementId} />
+        <Suspense fallback={null}>
+          <GoogleAnalytics measurementId={gaMeasurementId} />
+        </Suspense>
         {children}
       </body>
     </html>
