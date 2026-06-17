@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 import ThemeInlineScript from "@/components/ThemeInlineScript";
 
 import "./globals.css";
@@ -19,6 +20,7 @@ const description =
 
 const metadataBaseUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.trim() || "http://localhost:3000";
+const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || "";
 
 export const metadata: Metadata = {
   metadataBase: new URL(metadataBaseUrl),
@@ -93,7 +95,10 @@ export default function RootLayout({
       <head>
         <ThemeInlineScript />
       </head>
-      <body className={jczFont.variable}>{children}</body>
+      <body className={jczFont.variable}>
+        <GoogleAnalytics measurementId={gaMeasurementId} />
+        {children}
+      </body>
     </html>
   );
 }

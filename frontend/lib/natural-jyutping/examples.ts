@@ -15,13 +15,13 @@ export const NATURAL_JYUTCITZI_EXAMPLES: NaturalJyutcitziExample[] = [
     honzi: "齮齕",
     jyutping: "gi4 gat4",
     jyutcitzi: "󱞧󱝏",
-    naturalJyutcitzi: "—",
+    naturalJyutcitzi: "𤯄𤮿",
   },
   {
     honzi: "渄李啡哩",
     jyutping: "fi4 li1 fe4 le4",
     jyutcitzi: "󰟧󰻦󰞟󰺟",
-    naturalJyutcitzi: "𩖳𫸴",
+    naturalJyutcitzi: "𩖳𰌩𤇙𥩢",
   },
   {
     honzi: "？？？？",
@@ -47,12 +47,7 @@ export const NATURAL_JYUTCITZI_EXAMPLES: NaturalJyutcitziExample[] = [
     jyutcitzi: "󲉆󲉆󰥡",
     naturalJyutcitzi: "𥟐𥟐𩇩",
   },
-  {
-    honzi: "𠄻𳊯",
-    jyutping: "gi4 gat4",
-    jyutcitzi: "󱞧󱝏",
-    naturalJyutcitzi: "—",
-  },
+
   {
     honzi: "？？？？",
     jyutping: "bing4 ling1 bam4 lam4",
@@ -77,24 +72,24 @@ export const NATURAL_JYUTCITZI_EXAMPLES: NaturalJyutcitziExample[] = [
     jyutcitzi: "󰺜󰞜",
     naturalJyutcitzi: "𥩢𫸴",
   },
-  // {
-  //   honzi: "齮齕",
-  //   jyutping: "gi4 gat4",
-  //   jyutcitzi: "󱞧󱝏",
-  //   naturalJyutcitzi: "—",
-  // },
-  // {
-  //   honzi: "齮齕",
-  //   jyutping: "gi4 gat4",
-  //   jyutcitzi: "󱞧󱝏",
-  //   naturalJyutcitzi: "—",
-  // },
-  // {
-  //   honzi: "齮齕",
-  //   jyutping: "gi4 gat4",
-  //   jyutcitzi: "󱞧󱝏",
-  //   naturalJyutcitzi: "—",
-  // },
+  {
+    honzi: "嘰哩咕嚕",
+    jyutping: "gi1 lei5 gu1 lu5",
+    jyutcitzi: "󱞦󰻦󱠞󰽞",
+    naturalJyutcitzi: "𤯄𰌩𰀣𠲩",
+  },
+  {
+    honzi: "？？",
+    jyutping: "lau6 bau6",
+    jyutcitzi: "󰹥󰈥",
+    naturalJyutcitzi: "叾𱒑",
+  },
+  {
+    honzi: "一野拂落去",
+    jyutping: "jat1 jip6 faak3 lok3 kou3",
+    jyutcitzi: "󱖎󱖙󰝒󰽒󱯢",
+    naturalJyutcitzi: "一野𱠟落去",
+  },
   // {
   //   honzi: "齮齕",
   //   jyutping: "gi4 gat4",
