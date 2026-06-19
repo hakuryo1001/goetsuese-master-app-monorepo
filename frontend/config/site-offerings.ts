@@ -130,6 +130,21 @@ export const siteOfferings: SiteOffering[] = [
     ],
   },
   {
+    key: "script-reform-substack",
+    kind: "external",
+    title: "粵字改革（Substack）",
+    description:
+      "粵語書面語、詞彙、正字法同文法改革論述；訂閱以接收最新文章。",
+    links: [
+      {
+        label: "Substack →",
+        href: externalUrls.cantoneseScriptReformSubstack,
+        variant: "button",
+        analyticsLinkId: "cantonese_script_reform_substack",
+      },
+    ],
+  },
+  {
     key: "declaration",
     kind: "internal",
     title: "粵字改革宣言",
