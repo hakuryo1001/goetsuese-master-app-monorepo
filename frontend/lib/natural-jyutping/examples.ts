@@ -90,12 +90,12 @@ export const NATURAL_JYUTCITZI_EXAMPLES: NaturalJyutcitziExample[] = [
     jyutcitzi: "󱖎󱖙󰝒󰽒󱯢",
     naturalJyutcitzi: "一野𱠟落去",
   },
-  // {
-  //   honzi: "齮齕",
-  //   jyutping: "gi4 gat4",
-  //   jyutcitzi: "󱞧󱝏",
-  //   naturalJyutcitzi: "—",
-  // },
+  {
+    honzi: "亞吱亞咗",
+    jyutping: "a3 zi1 a3 zo5",
+    jyutcitzi: "󰀒󱂦󰀒󱃦",
+    naturalJyutcitzi: "亞𥎩亞㱒",
+  },
   // {
   //   honzi: "齮齕",
   //   jyutping: "gi4 gat4",
