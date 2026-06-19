@@ -6,4 +6,5 @@ export const externalUrls = {
     "https://github.com/cantonese-jyutcitzi/jyutcitzi-chrome-extension",
   jyutcitziIntroYoutube:
     "https://www.youtube.com/watch?v=7WzZ8jfi1aA&t=49s&pp=ygUKanl1dGNpdHppIA%3D%3D",
+  kowloonPublishingBooks: "https://www.kowloonpublishing.com/books",
 } as const;

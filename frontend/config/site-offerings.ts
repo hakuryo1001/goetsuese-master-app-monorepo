@@ -18,6 +18,7 @@ export type SiteOffering =
         label: string;
         href: string;
         variant?: "button" | "text";
+        analyticsLinkId?: string;
       }[];
     }
   | {
@@ -110,6 +111,21 @@ export const siteOfferings: SiteOffering[] = [
         label: "GitHub：安裝與說明 →",
         href: externalUrls.chromeExtensionRepo,
         variant: "button",
+      },
+    ],
+  },
+  {
+    key: "kowloon-publishing",
+    kind: "external",
+    title: "九龍印書館",
+    description:
+      "廣東話文學刊物——包括《粵文改革論》同其他粵語經典。今日收藏，聽日珍藏。",
+    links: [
+      {
+        label: "睇睇啲書 →",
+        href: externalUrls.kowloonPublishingBooks,
+        variant: "button",
+        analyticsLinkId: "kowloon_publishing_books",
       },
     ],
   },

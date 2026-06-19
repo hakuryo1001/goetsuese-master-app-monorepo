@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { ToolCard } from "@/components/ToolCard";
+import { TrackedExternalLink } from "@/components/TrackedExternalLink";
 import { uiStyles } from "@/lib/ui-styles";
 import { siteOfferings } from "@/config/site-offerings";
 
@@ -42,29 +43,15 @@ export default function Home() {
 
                 {item.kind === "external" && (
                   <div className="mt-auto flex flex-col items-center justify-center gap-2 border-t border-line pt-5 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-4">
-                    {item.links.map((link) =>
-                      link.variant === "text" ? (
-                        <a
-                          key={link.href}
-                          href={link.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={uiStyles.textLink}
-                        >
-                          {link.label}
-                        </a>
-                      ) : (
-                        <a
-                          key={link.href}
-                          href={link.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={uiStyles.outlineButton}
-                        >
-                          {link.label}
-                        </a>
-                      )
-                    )}
+                    {item.links.map((link) => (
+                      <TrackedExternalLink
+                        key={link.href}
+                        href={link.href}
+                        label={link.label}
+                        variant={link.variant}
+                        analyticsLinkId={link.analyticsLinkId}
+                      />
+                    ))}
                   </div>
                 )}
 
