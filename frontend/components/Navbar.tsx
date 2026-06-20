@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FaDiscord, FaReddit } from "react-icons/fa";
+import { FaDiscord } from "react-icons/fa";
 
 import ThemeToggle from "@/components/ThemeToggle";
 import { links } from "./links";
@@ -63,15 +63,6 @@ export default function Navbar() {
               aria-label="Discord — Jyutcitzi 粵切字"
             >
               <FaDiscord className="h-5 w-5 fill-ink-muted grayscale transition-colors hover:fill-ink" />
-            </Link>
-            <Link
-              href={links.reddit}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-ink-muted hover:text-ink"
-              aria-label="Reddit"
-            >
-              <FaReddit className="h-5 w-5 fill-ink-muted grayscale transition-colors hover:fill-ink" />
             </Link>
           </div>
         </div>
