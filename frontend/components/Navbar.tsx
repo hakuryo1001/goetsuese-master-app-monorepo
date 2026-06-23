@@ -17,8 +17,11 @@ export default function Navbar() {
           <div className="m-4">
             <Link href="/" className="flex place-items-center">
               <div className="grid grid-cols-1 align-middle">
-                <div className="m-4 text-xl font-semibold whitespace-nowrap text-ink">
-                  Goetsusioji | 吳小字
+                <div className="m-4 text-center md:text-left">
+                  <div className="font-jcz text-xl font-semibold text-ink">
+                    
+                  </div>
+                  <div className="text-base font-semibold text-ink">吳語小字</div>
                 </div>
               </div>
             </Link>

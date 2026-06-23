@@ -9,9 +9,12 @@ export default function Home() {
   return (
     <main className="rounded-lg p-4 font-jcz">
       <header className="m-6 p-6 md:m-7 md:p-7">
-        <h1 className="text-center text-5xl font-semibold tracking-tight text-ink">
-          Goetsusioji
+        <h1 className="text-center text-5xl font-semibold tracking-tight text-ink md:text-6xl">
+          
         </h1>
+        <p className="mt-6 text-center text-2xl font-semibold text-ink md:text-3xl">
+          吳語小字
+        </p>
         <p className="m-10 text-center text-lg leading-relaxed text-ink-muted md:text-xl">
           吳小字（Goetsuese）網上輸入：用 ngven 羅馬字輸入，瀏覽器內選字上屏，唔經伺服器。
         </p>
