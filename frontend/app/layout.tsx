@@ -4,20 +4,21 @@ import { Suspense } from "react";
 
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import ThemeInlineScript from "@/components/ThemeInlineScript";
+import { hanaMinA, hanaMinB } from "@/lib/fonts/hana-min";
 
 import "./globals.css";
 
-const jczFont = localFont({
-  src: "../public/fonts/JyutcitziWithSourceHanSerifTCExtraLight.ttf",
-  variable: "--font-jcz",
+const goetsusiojiFont = localFont({
+  src: "../public/fonts/goetsusioji.ttf",
+  variable: "--font-goetsusioji",
   display: "swap",
 });
 
-const siteName = "Jyutcitzi 粵切字";
+const siteName = "Goetsusioji 吳小字";
 const defaultTitle =
-  "Jyutcitzi 粵切字 — Cantonese transliterator, fonts & learning tools";
+  "Goetsusioji 吳小字 — ngven romanization typer & Goetsuese script tools";
 const description =
-  "Free online Cantonese (粵語) tools: transliterate Han text and Jyutping into Jyutcitzi, browse Jyutcitzi fonts, and explore resources for Cantonese script reform. 漢字／粵拼轉粵切字、字型與學習資源。";
+  "Free online Goetsuese (吳語) tools: type ngven romanization into Goetsusioji in the browser. No server required. 用 ngven 羅馬字輸入吳小字。";
 
 const metadataBaseUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.trim() || "http://localhost:3000";
@@ -32,35 +33,22 @@ export const metadata: Metadata = {
   description,
   applicationName: siteName,
   keywords: [
-
-    "粵切字",
-
-    "粵語",
-
+    "Goetsusioji",
+    "Goetsuese",
+    "吳小字",
+    "吳語",
+    "ngven",
     "漢字",
-    "粵拼",
-    "粵文",
-    "粵字",
-    "白話文",
-    "白話",
-    "白言文",
-    "廣東話",
-    "廣州話",
-
-
-    "粵字改革",
-
-    "粵語文字", "Cantonese script",
-    "font", "transliteration",
-    "Jyutping",
-    "converter", "Cantonese", "Jyutcitzi", "Yue", "Toishanese", "transliteration",
-    "Jyutping",
+    "Honzi",
     "Han characters",
-    "Honzi"
+    "romanization",
+    "typer",
+    "IME",
+    "font",
   ],
-  authors: [{ name: "Jyutcitzi" }],
-  creator: "Jyutcitzi",
-  publisher: "Jyutcitzi",
+  authors: [{ name: "Goetsusioji" }],
+  creator: "Goetsusioji",
+  publisher: "Goetsusioji",
   robots: {
     index: true,
     follow: true,
@@ -96,7 +84,9 @@ export default function RootLayout({
       <head>
         <ThemeInlineScript />
       </head>
-      <body className={jczFont.variable}>
+      <body
+        className={`${goetsusiojiFont.variable} ${hanaMinA.variable} ${hanaMinB.variable}`}
+      >
         <Suspense fallback={null}>
           <GoogleAnalytics measurementId={gaMeasurementId} />
         </Suspense>

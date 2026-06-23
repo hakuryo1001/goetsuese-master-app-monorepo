@@ -18,7 +18,7 @@ export default function Navbar() {
             <Link href="/" className="flex place-items-center">
               <div className="grid grid-cols-1 align-middle">
                 <div className="m-4 text-xl font-semibold whitespace-nowrap text-ink">
-                  Jyutcitzi | 粵切字｜
+                  Goetsusioji | 吳小字
                 </div>
               </div>
             </Link>
@@ -60,7 +60,7 @@ export default function Navbar() {
               target="_blank"
               rel="noopener noreferrer"
               className="text-ink-muted hover:text-ink"
-              aria-label="Discord — Jyutcitzi 粵切字"
+              aria-label="Discord — Goetsusioji"
             >
               <FaDiscord className="h-5 w-5 fill-ink-muted grayscale transition-colors hover:fill-ink" />
             </Link>

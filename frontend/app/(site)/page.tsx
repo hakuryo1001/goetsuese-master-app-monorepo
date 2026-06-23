@@ -10,18 +10,18 @@ export default function Home() {
     <main className="rounded-lg p-4 font-jcz">
       <header className="m-6 p-6 md:m-7 md:p-7">
         <h1 className="text-center text-5xl font-semibold tracking-tight text-ink">
-          
+          Goetsusioji
         </h1>
         <p className="m-10 text-center text-lg leading-relaxed text-ink-muted md:text-xl">
-          粵語，悲乃一無文學、無哲學、無科學的語言。何解我等受盡此等的文學貧況呼？唉，無非乃我地冇自己嘅文字噉解。
+          吳小字（Goetsuese）網上輸入：用 ngven 羅馬字輸入，瀏覽器內選字上屏，唔經伺服器。
         </p>
       </header>
 
       <section
         className="mx-auto max-w-6xl px-2 pb-12"
-        aria-label="粵切字工具與資源"
+        aria-label="Goetsusioji tools"
       >
-        <h2 className="sr-only">工具與資源</h2>
+        <h2 className="sr-only">工具</h2>
         <ul className="grid list-none grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {siteOfferings.map((item) => (
             <li key={item.key} className="min-w-0">

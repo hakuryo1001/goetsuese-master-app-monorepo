@@ -28,8 +28,8 @@ export type SiteOffering =
       description: string;
     };
 
-/** Add new tools here — the home page grid renders from this list. */
-export const siteOfferings: SiteOffering[] = [
+/** Cantonese / Jyutcitzi scaffold entries — kept for reference, not shown on home. */
+export const scaffoldOfferings: SiteOffering[] = [
   {
     key: "transliterate",
     kind: "internal",
@@ -153,10 +153,23 @@ export const siteOfferings: SiteOffering[] = [
     href: "/declaration",
     cta: "閱讀全文",
   },
+];
+
+/** Public home page grid — Goetsusioji-facing tools only. */
+export const siteOfferings: SiteOffering[] = [
+  {
+    key: "goetsusioji-typer",
+    kind: "internal",
+    title: "Goetsusioji 輸入",
+    description:
+      "用 ngven 羅馬字搵吳小字候選、選字上屏；瀏覽器內完成，唔經伺服器。",
+    href: "/tools/typer",
+    cta: "開啟輸入法",
+  },
   {
     key: "more",
     kind: "placeholder",
     title: "更多工具",
-    description: "詞典、練習與其他粵切字相關功能陸續準備緊。",
+    description: "詞典、轉換器同其他 Goetsuese 功能陸續準備緊。",
   },
 ];

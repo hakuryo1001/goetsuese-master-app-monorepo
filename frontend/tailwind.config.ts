@@ -34,7 +34,23 @@ export default {
         "alert-text": "var(--color-alert-text)",
       },
       fontFamily: {
-        jcz: ["var(--font-jcz)", "ui-serif", "Georgia", "serif"],
+        /** Goetsusioji PUA + HanaMin for 漢字 (replaces Jyutcitzi compound font). */
+        jcz: [
+          "var(--font-goetsusioji)",
+          "var(--font-hana-min-a)",
+          "var(--font-hana-min-b)",
+          "ui-serif",
+          "Georgia",
+          "serif",
+        ],
+        goetsusioji: [
+          "var(--font-goetsusioji)",
+          "var(--font-hana-min-a)",
+          "var(--font-hana-min-b)",
+          "ui-serif",
+          "Georgia",
+          "serif",
+        ],
         "babel-stone": ["var(--font-babel-stone)", "ui-serif", "Georgia", "serif"],
         /** HanaMinA+B for rare hanzi; BabelStoneHan for natural glyphs; Jyutcitzi for reform PUA. */
         "hana-min": [
@@ -48,7 +64,7 @@ export default {
           "var(--font-hana-min-a)",
           "var(--font-hana-min-b)",
           "var(--font-babel-stone)",
-          "var(--font-jcz)",
+          "var(--font-goetsusioji)",
           "ui-serif",
           "Georgia",
           "serif",

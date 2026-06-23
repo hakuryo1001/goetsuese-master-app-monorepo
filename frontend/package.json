@@ -9,6 +9,8 @@
     "lint": "next lint",
     "ime:update-rime-remote": "node scripts/ime/update-rime-submodule.mjs",
     "ime:build-lexicons": "node scripts/ime/build-lexicons.mjs",
+    "goetsusioji:export-syllables": "node scripts/goetsusioji/export-syllables.mjs",
+    "goetsusioji:prepare-lexicon": "npm run goetsusioji:export-syllables",
     "ime:prepare-lexicons": "npm run ime:update-rime-remote && npm run ime:build-lexicons"
   },
   "dependencies": {
