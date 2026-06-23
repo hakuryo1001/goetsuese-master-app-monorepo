@@ -1,4 +1,4 @@
 {
-  "installCommand": "cd .. && git submodule update --init submodules/jyutcitzi-RIME submodules/rime-cantonese transliteration/vendor/jyutcitzi-transliterate && git submodule update --remote submodules/jyutcitzi-RIME && cd frontend && npm ci",
-  "buildCommand": "npm run goetsusioji:export-syllables && npm run ime:build-lexicons && npm run build"
+  "installCommand": "npm ci",
+  "buildCommand": "npm run goetsusioji:export-syllables && npm run build"
 }
