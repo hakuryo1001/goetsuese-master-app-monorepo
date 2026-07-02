@@ -32,6 +32,10 @@ export default {
         "alert-bg": "var(--color-alert-bg)",
         "alert-border": "var(--color-alert-border)",
         "alert-text": "var(--color-alert-text)",
+        brand: "var(--color-brand)",
+        accent: "var(--color-accent)",
+        "accent-hover": "var(--color-accent-hover)",
+        jade: "var(--color-jade)",
       },
       fontFamily: {
         /** Goetsusioji PUA + HanaMin for 漢字 (replaces Jyutcitzi compound font). */

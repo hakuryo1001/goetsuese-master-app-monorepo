@@ -64,17 +64,17 @@ export default function ThemeToggle() {
       aria-label={label}
       disabled={mode === null}
       onClick={toggle}
-      className="relative h-9 w-16 shrink-0 rounded-full border border-line bg-muted p-[3px] shadow-inner transition-opacity hover:border-line-strong disabled:opacity-50"
+      className="relative h-9 w-16 shrink-0 rounded-full border border-line bg-muted p-[3px] shadow-inner transition-[border-color,opacity] hover:border-brand/40 disabled:opacity-50"
     >
       <span
         className="pointer-events-none absolute inset-[3px] z-[2] flex select-none items-center justify-between px-1"
         aria-hidden
       >
         <HiOutlineSun
-          className={`h-3.5 w-3.5 shrink-0 transition-colors ${!isDark && mode !== null ? "text-ink" : "text-ink-muted"}`}
+          className={`h-3.5 w-3.5 shrink-0 transition-colors ${!isDark && mode !== null ? "text-accent" : "text-ink-muted"}`}
         />
         <HiOutlineMoon
-          className={`h-3.5 w-3.5 shrink-0 transition-colors ${isDark ? "text-ink" : "text-ink-muted"}`}
+          className={`h-3.5 w-3.5 shrink-0 transition-colors ${isDark ? "text-accent" : "text-ink-muted"}`}
         />
       </span>
 

@@ -5,59 +5,84 @@
 @layer base {
   :root {
     color-scheme: light;
-    --color-canvas: #f5f5f5;
-    --color-elevated: #ffffff;
-    --color-muted: #e5e5e5;
-    --color-ink: #0a0a0a;
-    --color-ink-muted: #525252;
-    --color-ink-faint: #737373;
-    --color-line: #d4d4d4;
-    --color-line-strong: #a3a3a3;
-    --color-panel: #eeeeee;
-    --color-panel-shadow: rgba(0, 0, 0, 0.06);
-    --color-card-shadow: rgba(0, 0, 0, 0.08);
-    --color-input-bg: #ffffff;
-    --color-input-ink: #0a0a0a;
-    --color-input-border: #a3a3a3;
-    --color-input-border-focus: #404040;
-    --color-output-bg: #e5e5e5;
-    --color-output-ink: #0a0a0a;
-    --color-output-border: #a3a3a3;
-    --color-output-shadow: rgba(0, 0, 0, 0.06);
-    --color-alert-bg: #e5e5e5;
-    --color-alert-border: #737373;
-    --color-alert-text: #262626;
-    --color-accent-form: #404040;
+
+    /* Goetsu National Palette v2 — light (washi paper) */
+    --color-canvas: #f3eee3; /* Rice Paper */
+    --color-elevated: #f8f5ef; /* Cards */
+    --color-muted: #ece5d6; /* Raised surfaces */
+    --color-ink: #22292d; /* Ink */
+    --color-ink-muted: #676a68; /* Slate Stone */
+    --color-ink-faint: #5e5348; /* Bronze Shadow */
+    --color-line: #d5cec2; /* Stone */
+    --color-line-strong: #b6aea2; /* Weathered Stone */
+    --color-panel: #ece5d6;
+    --color-panel-shadow: rgba(56, 53, 50, 0.08);
+    --color-card-shadow: rgba(23, 58, 74, 0.1);
+
+    --color-input-bg: #f8f5ef;
+    --color-input-ink: #22292d;
+    --color-input-border: #b6aea2;
+    --color-input-border-focus: #476978; /* River Blue */
+
+    --color-output-bg: #ece5d6;
+    --color-output-ink: #22292d;
+    --color-output-border: #d5cec2;
+    --color-output-shadow: rgba(56, 53, 50, 0.06);
+
+    --color-alert-bg: #ece5d6;
+    --color-alert-border: #a48755; /* Bronze */
+    --color-alert-text: #383532; /* Bronze Black */
+
+    --color-accent-form: #476978;
+    --color-accent: #a48755; /* Bronze — use sparingly */
+    --color-accent-hover: #6c5944; /* Dark Bronze */
+    --color-jade: #6f8574;
+    --color-brand: #173a4a; /* Deep Lake */
   }
 
   .dark {
     color-scheme: dark;
-    --color-canvas: #000000;
-    --color-elevated: #000000;
-    --color-muted: #0a0a0a;
-    --color-ink: #fafafa;
-    --color-ink-muted: #a3a3a3;
-    --color-ink-faint: #737373;
-    --color-line: #404040;
-    --color-line-strong: #737373;
-    --color-panel: #0a0a0a;
-    --color-panel-shadow: rgba(0, 0, 0, 0.5);
-    --color-card-shadow: rgba(0, 0, 0, 0.55);
-    --color-input-bg: #fafafa;
-    --color-input-ink: #0a0a0a;
-    --color-input-border: #525252;
-    --color-input-border-focus: #d4d4d4;
-    --color-output-bg: #0a0a0a;
-    --color-output-ink: #fafafa;
-    --color-output-border: #404040;
-    --color-output-shadow: rgba(0, 0, 0, 0.65);
-    --color-alert-bg: #171717;
-    --color-alert-border: #525252;
-    --color-alert-text: #e5e5e5;
-    --color-accent-form: #a3a3a3;
+
+    /* Goetsu National Palette v2 — dark (night lake / lacquer) */
+    --color-canvas: #122830;
+    --color-elevated: #173a4a; /* Deep Lake */
+    --color-muted: #284d5c;
+    --color-ink: #f3eee3; /* Rice Paper */
+    --color-ink-muted: #a8b8bb; /* Mist Blue */
+    --color-ink-faint: #91a7ae;
+    --color-line: #476978; /* River Blue */
+    --color-line-strong: #676a68;
+    --color-panel: #284d5c;
+    --color-panel-shadow: rgba(0, 0, 0, 0.35);
+    --color-card-shadow: rgba(0, 0, 0, 0.45);
+
+    --color-input-bg: #284d5c;
+    --color-input-ink: #f3eee3;
+    --color-input-border: #476978;
+    --color-input-border-focus: #c3a26b; /* Bronze highlight */
+
+    --color-output-bg: #122830;
+    --color-output-ink: #f3eee3;
+    --color-output-border: #476978;
+    --color-output-shadow: rgba(0, 0, 0, 0.4);
+
+    --color-alert-bg: #284d5c;
+    --color-alert-border: #c3a26b;
+    --color-alert-text: #f3eee3;
+
+    --color-accent-form: #c3a26b;
+    --color-accent: #c3a26b;
+    --color-accent-hover: #a48755;
+    --color-jade: #6f8574;
+    --color-brand: #476978;
   }
 
   body {
     @apply min-h-screen bg-canvas font-jcz text-ink antialiased;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-accent) 30%, transparent);
+    color: var(--color-ink);
   }
 }
