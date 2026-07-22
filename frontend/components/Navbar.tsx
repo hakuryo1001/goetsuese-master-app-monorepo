@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { FaDiscord } from "react-icons/fa";
 
+import { SiteLogo } from "@/components/SiteLogo";
 import ThemeToggle from "@/components/ThemeToggle";
 import { links } from "./links";
 
@@ -15,14 +16,16 @@ export default function Navbar() {
       <div className="md:flex md:justify-between">
         <div className="mb-6 md:mb-0">
           <div className="m-4">
-            <Link href="/" className="flex place-items-center">
-              <div className="grid grid-cols-1 align-middle">
-                <div className="m-4 text-center md:text-left">
-                  <div className="font-jcz text-xl font-semibold text-ink">
-                    
-                  </div>
-                  <div className="text-base font-semibold text-ink">吳語小字</div>
+            <Link
+              href="/"
+              className="flex flex-col items-center gap-3 sm:flex-row sm:items-center"
+            >
+              <SiteLogo size={56} className="rounded-sm" />
+              <div className="text-center md:text-left">
+                <div className="font-jcz text-xl font-semibold text-ink">
+                  
                 </div>
+                <div className="text-base font-semibold text-ink">吳語小字</div>
               </div>
             </Link>
           </div>

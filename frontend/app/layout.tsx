@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { Suspense } from "react";
 
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import { siteLogoOpenGraphImage } from "@/components/SiteLogo";
 import ThemeInlineScript from "@/components/ThemeInlineScript";
 import { hanaMinA, hanaMinB } from "@/lib/fonts/hana-min";
 
@@ -57,6 +58,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  icons: {
+    icon: siteLogoOpenGraphImage.url,
+    apple: siteLogoOpenGraphImage.url,
+  },
   openGraph: {
     type: "website",
     locale: "zh_HK",
@@ -65,11 +70,13 @@ export const metadata: Metadata = {
     siteName,
     title: defaultTitle,
     description,
+    images: [siteLogoOpenGraphImage],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: defaultTitle,
     description,
+    images: [siteLogoOpenGraphImage.url],
   },
   category: "education",
 };

@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { SiteLogo } from "@/components/SiteLogo";
 import { ToolCard } from "@/components/ToolCard";
 import { TrackedExternalLink } from "@/components/TrackedExternalLink";
 import { uiStyles } from "@/lib/ui-styles";
@@ -9,7 +10,10 @@ export default function Home() {
   return (
     <main className="rounded-lg p-4 font-jcz">
       <header className="m-6 p-6 md:m-7 md:p-7">
-        <h1 className="text-center text-5xl font-semibold tracking-tight text-ink md:text-6xl">
+        <div className="flex justify-center">
+          <SiteLogo size={112} className="rounded-md" priority />
+        </div>
+        <h1 className="mt-6 text-center text-5xl font-semibold tracking-tight text-ink md:text-6xl">
           
         </h1>
         <p className="mt-6 text-center text-2xl font-semibold text-ink md:text-3xl">
