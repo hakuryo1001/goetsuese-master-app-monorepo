@@ -1,8 +1,14 @@
 import type { CharactersMap, GoetsusiojiLexicon } from "./types";
 
-function isFilled(chars: unknown): boolean {
-  if (!Array.isArray(chars) || chars.length === 0) return false;
-  return chars.some((c) => typeof c === "string" && c.trim().length > 0);
+function hasGlyph(entries: unknown): boolean {
+  if (!Array.isArray(entries) || entries.length === 0) return false;
+  return entries.some(
+    (e) =>
+      e &&
+      typeof e === "object" &&
+      typeof (e as { glyph?: unknown }).glyph === "string" &&
+      String((e as { glyph: string }).glyph).trim().length > 0
+  );
 }
 
 /** Build lookup indexes from a loaded characters map. */
@@ -13,13 +19,14 @@ export function buildIndexes(map: CharactersMap): GoetsusiojiLexicon {
   let filledCount = 0;
 
   for (const syllable of keys) {
-    if (isFilled(map[syllable])) filledCount += 1;
+    if (hasGlyph(map[syllable])) filledCount += 1;
 
-    const glyphs = map[syllable];
-    if (!Array.isArray(glyphs)) continue;
+    const entries = map[syllable];
+    if (!Array.isArray(entries)) continue;
 
     const seen = new Set<string>();
-    for (const glyph of glyphs) {
+    for (const entry of entries) {
+      const glyph = entry?.glyph;
       if (typeof glyph !== "string" || !glyph.trim()) continue;
       if (seen.has(glyph)) continue;
       seen.add(glyph);

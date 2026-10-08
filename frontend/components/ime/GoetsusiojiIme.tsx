@@ -11,11 +11,13 @@ import {
 
 import {
   clearGoetsusiojiLexiconCache,
+  hasSiauzyGlyph,
   isKnownSyllable,
   loadGoetsusiojiLexicon,
   prefixCandidates,
   type GoetsusiojiCandidate,
   type GoetsusiojiLexicon,
+  type GoetsusiojiOutputMode,
 } from "@/lib/goetsusioji";
 
 const MAX_CANDIDATES = 50;
@@ -23,6 +25,16 @@ const PAGE_SIZE = 9;
 
 /** ngven romanization letters (tone marks stripped before lookup). */
 const NGven_KEY = /^[a-z]$/i;
+
+function commitTextFor(
+  c: GoetsusiojiCandidate,
+  mode: GoetsusiojiOutputMode
+): string {
+  if (mode === "han") {
+    return c.han || c.glyph || "";
+  }
+  return c.glyph || c.han || "";
+}
 
 export default function GoetsusiojiIme() {
   const taRef = useRef<HTMLTextAreaElement>(null);
@@ -32,6 +44,8 @@ export default function GoetsusiojiIme() {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [candidateOffset, setCandidateOffset] = useState(0);
   const [passthrough, setPassthrough] = useState(false);
+  const [outputMode, setOutputMode] =
+    useState<GoetsusiojiOutputMode>("siauzy");
 
   useEffect(() => {
     let cancelled = false;
@@ -67,6 +81,7 @@ export default function GoetsusiojiIme() {
 
   const commitText = useCallback(
     (text: string) => {
+      if (!text) return;
       const ta = taRef.current;
       if (!ta) {
         setCommitted((v) => v + text);
@@ -88,10 +103,10 @@ export default function GoetsusiojiIme() {
 
   const commitCandidate = useCallback(
     (c: GoetsusiojiCandidate) => {
-      commitText(c.glyph);
+      commitText(commitTextFor(c, outputMode));
       setBuffer("");
     },
-    [commitText]
+    [commitText, outputMode]
   );
 
   const togglePassthrough = useCallback(() => {
@@ -173,7 +188,10 @@ export default function GoetsusiojiIme() {
     if (!buffer || !lexicon) return null;
     if (candidates.length > 0) return null;
     if (isKnownSyllable(lexicon, buffer)) {
-      return "Known syllable — no glyphs in lexicon.";
+      if (!hasSiauzyGlyph(lexicon, buffer)) {
+        return "Known syllable — Siauzy missing; Han spelling may still be available under a longer prefix.";
+      }
+      return "Known syllable — no candidates in lexicon.";
     }
     return "No matching syllable.";
   }, [buffer, lexicon, candidates.length]);
@@ -183,9 +201,39 @@ export default function GoetsusiojiIme() {
       <div className="flex flex-wrap items-center gap-4 rounded-lg border border-line bg-panel p-4">
         {lexicon && (
           <p className="text-sm text-ink-muted">
-            {lexicon.filledCount} / {lexicon.keys.length} syllables in lexicon
+            {lexicon.filledCount} / {lexicon.keys.length} syllables with Siauzy
           </p>
         )}
+        <div
+          className="inline-flex rounded border border-line bg-elevated p-0.5 text-sm"
+          role="group"
+          aria-label="Output script"
+        >
+          <button
+            type="button"
+            className={`rounded px-3 py-1.5 ${
+              outputMode === "siauzy"
+                ? "bg-muted font-medium text-ink"
+                : "text-ink-muted hover:text-ink"
+            }`}
+            aria-pressed={outputMode === "siauzy"}
+            onClick={() => setOutputMode("siauzy")}
+          >
+            Siauzy
+          </button>
+          <button
+            type="button"
+            className={`rounded px-3 py-1.5 ${
+              outputMode === "han"
+                ? "bg-muted font-medium text-ink"
+                : "text-ink-muted hover:text-ink"
+            }`}
+            aria-pressed={outputMode === "han"}
+            onClick={() => setOutputMode("han")}
+          >
+            Han
+          </button>
+        </div>
         <button
           type="button"
           className="rounded border border-line bg-elevated px-3 py-1.5 text-sm text-ink hover:bg-muted"
@@ -253,7 +301,9 @@ export default function GoetsusiojiIme() {
           rows={10}
           value={committed}
           onChange={(e) => setCommitted(e.target.value)}
-          className="box-border w-full resize-y rounded-lg border-2 border-input-border bg-input-bg p-3 font-semibold text-input-ink outline-none focus:border-input-border-focus"
+          className={`box-border w-full resize-y rounded-lg border-2 border-input-border bg-input-bg p-3 font-semibold text-input-ink outline-none focus:border-input-border-focus ${
+            outputMode === "siauzy" ? "font-jcz" : "font-hana-min"
+          }`}
           spellCheck={false}
           onKeyDown={handleKeyDown}
           placeholder={
@@ -266,18 +316,38 @@ export default function GoetsusiojiIme() {
 
       <div className="rounded-lg border border-line bg-elevated p-4">
         <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-muted">
-          Candidates (1–9 select · Space / Enter first · ↑↓ page)
+          Candidates (1–9 select · Space / Enter first · ↑↓ page) · commit{" "}
+          {outputMode === "siauzy" ? "Siauzy" : "Han"}
           {passthrough && (
             <span className="block font-normal normal-case text-ink-muted">
               — inactive in plain typing mode
             </span>
           )}
         </div>
-        <ol className="list-decimal space-y-1 pl-5 text-sm font-jcz">
+        <ol className="list-decimal space-y-2 pl-5 text-sm">
           {page.map((c, i) => (
-            <li key={`${candidateOffset + i}-${c.syllable}-${c.glyph}-${c.index}`}>
-              <span className="font-sans text-ink-muted">{c.syllable}</span> →{" "}
-              {c.glyph}
+            <li
+              key={`${candidateOffset + i}-${c.syllable}-${c.glyph ?? ""}-${c.han}-${c.index}`}
+            >
+              <button
+                type="button"
+                className="text-left hover:underline"
+                onClick={() => commitCandidate(c)}
+              >
+                <span className="font-sans text-ink-muted">{c.syllable}</span>
+                {" → "}
+                {c.glyph ? (
+                  <span className="font-jcz text-lg text-ink">{c.glyph}</span>
+                ) : (
+                  <span className="text-ink-muted">(no Siauzy)</span>
+                )}
+                {c.han ? (
+                  <>
+                    {" · "}
+                    <span className="font-hana-min text-ink">{c.han}</span>
+                  </>
+                ) : null}
+              </button>
             </li>
           ))}
         </ol>
@@ -287,8 +357,9 @@ export default function GoetsusiojiIme() {
       </div>
 
       <p className="text-sm text-ink-muted">
-        Browser-only: type ngven romanization, pick Goetsusioji glyph candidates,
-        commit to the box. No server calls. Tone marks are ignored for lookup.
+        Browser-only: type ngven romanization, pick candidates, commit Siauzy
+        (font glyphs) or Han (progenitor spelling). Tone marks are ignored for
+        lookup. No server calls.
       </p>
     </div>
   );

@@ -52,7 +52,12 @@ function CopyButton({
 
 export default function GoetsusiojiExamples() {
   const [rendered, setRendered] = useState<
-    Array<{ romanization: string; goetsusioji: string; gloss: string }>
+    Array<{
+      romanization: string;
+      siauzy: string;
+      han: string;
+      gloss: string;
+    }>
   >([]);
 
   useEffect(() => {
@@ -63,8 +68,10 @@ export default function GoetsusiojiExamples() {
         const mapper = new GoetsusiojiMapper(lex, meta);
         setRendered(
           GOETSUSIOJI_EXAMPLES.map((ex) => ({
-            ...ex,
-            goetsusioji: mapper.transliterateText(ex.romanization),
+            romanization: ex.romanization,
+            gloss: ex.gloss,
+            siauzy: mapper.transliterateText(ex.romanization, "siauzy"),
+            han: mapper.transliterateText(ex.romanization, "han"),
           }))
         );
       })
@@ -72,8 +79,10 @@ export default function GoetsusiojiExamples() {
         if (!cancelled) {
           setRendered(
             GOETSUSIOJI_EXAMPLES.map((ex) => ({
-              ...ex,
-              goetsusioji: "…",
+              romanization: ex.romanization,
+              gloss: ex.gloss,
+              siauzy: "…",
+              han: "…",
             }))
           );
         }
@@ -99,11 +108,20 @@ export default function GoetsusiojiExamples() {
           </div>
           <div className="mt-1 flex items-start justify-between gap-2">
             <div className="text-xl leading-none font-jcz text-ink">
-              {ex.goetsusioji}
+              {ex.siauzy}
             </div>
             <CopyButton
-              text={ex.goetsusioji}
-              label={`Copy Goetsusioji: ${ex.gloss || ex.romanization}`}
+              text={ex.siauzy}
+              label={`Copy Siauzy: ${ex.gloss || ex.romanization}`}
+            />
+          </div>
+          <div className="mt-1 flex items-start justify-between gap-2">
+            <div className="text-base leading-snug font-hana-min text-ink">
+              {ex.han}
+            </div>
+            <CopyButton
+              text={ex.han}
+              label={`Copy Han spelling: ${ex.gloss || ex.romanization}`}
             />
           </div>
           {ex.gloss && (

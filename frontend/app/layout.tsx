@@ -15,7 +15,7 @@ const goetsusiojiFont = localFont({
   display: "swap",
 });
 
-const siteName = "Goetsusioji 吳小字";
+const siteName = "吳小字";
 const defaultTitle =
   "Goetsusioji 吳小字 — ngven romanization typer & Goetsuese script tools";
 const description =

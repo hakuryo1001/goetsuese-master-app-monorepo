@@ -1,10 +1,21 @@
 import { normalizeAlias } from "./normalize";
-import type { GoetsusiojiLexicon, GoetsusiojiMeta } from "./types";
+import type {
+  GoetsusiojiLexicon,
+  GoetsusiojiMeta,
+  GoetsusiojiOutputMode,
+  SyllableOutput,
+} from "./types";
 
-type MappingEntry = {
-  char?: string;
+export type MappingEntry = {
+  glyph: string | null;
+  han: string;
   kind?: string;
 };
+
+function firstOutput(entries: SyllableOutput[] | undefined): SyllableOutput | null {
+  if (!entries?.length) return null;
+  return entries[0] ?? null;
+}
 
 export class GoetsusiojiMapper {
   private readonly lex: GoetsusiojiLexicon;
@@ -33,19 +44,33 @@ export class GoetsusiojiMapper {
   fromRomanization(text: string): MappingEntry | null {
     const key = normalizeAlias(text);
     if (!key) return null;
-    const glyphs = this.lex.map[key];
-    if (glyphs?.length) {
-      return { char: glyphs[0], kind: "syllable" };
+
+    const direct = firstOutput(this.lex.map[key]);
+    if (direct) {
+      return { glyph: direct.glyph, han: direct.han, kind: "syllable" };
     }
+
     const split = this.splitSyllable(key);
     if (split) {
       const compact = split[0] + split[1];
-      const compactGlyphs = this.lex.map[compact];
-      if (compactGlyphs?.length) {
-        return { char: compactGlyphs[0], kind: "syllable" };
+      const compactOut = firstOutput(this.lex.map[compact]);
+      if (compactOut) {
+        return {
+          glyph: compactOut.glyph,
+          han: compactOut.han,
+          kind: "syllable",
+        };
       }
     }
     return null;
+  }
+
+  /** Prefer Siauzy; fall back to Han when glyph is missing. */
+  textForMode(entry: MappingEntry, mode: GoetsusiojiOutputMode): string {
+    if (mode === "han") {
+      return entry.han || entry.glyph || "";
+    }
+    return entry.glyph || entry.han || "";
   }
 
   transliterateWords(phrase: string): Array<{
@@ -71,12 +96,19 @@ export class GoetsusiojiMapper {
     return out;
   }
 
-  transliterateText(phrase: string): string {
+  transliterateText(
+    phrase: string,
+    mode: GoetsusiojiOutputMode = "siauzy"
+  ): string {
     const chars: string[] = [];
     for (const item of this.transliterateWords(phrase)) {
       const mapping = item.mapping;
-      if (mapping?.char) chars.push(mapping.char);
-      else chars.push(`[${item.token}]`);
+      if (mapping) {
+        const text = this.textForMode(mapping, mode);
+        chars.push(text || `[${item.token}]`);
+      } else {
+        chars.push(`[${item.token}]`);
+      }
     }
     return chars.join("");
   }

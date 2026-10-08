@@ -167,6 +167,15 @@ export const siteOfferings: SiteOffering[] = [
     cta: "開啟輸入法",
   },
   {
+    key: "goetsusioji-orthography",
+    kind: "internal",
+    title: "吳小字書寫系統",
+    description:
+      "聲母、韻母、介母部件總表，以及拼合規則與祖形漢字對照。",
+    href: "/orthography",
+    cta: "查看總表",
+  },
+  {
     key: "more",
     kind: "placeholder",
     title: "更多工具",

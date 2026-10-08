@@ -1,0 +1,62 @@
+{
+  "keq": {
+    "glyph": "",
+    "han": "工出",
+    "codepoints": [
+      "U+F226"
+    ],
+    "rule": 1
+  },
+  "tiau": {
+    "glyph": "",
+    "han": "刀以号",
+    "codepoints": [
+      "U+F147",
+      "U+F02E"
+    ],
+    "rule": 2
+  },
+  "shian": {
+    "glyph": "",
+    "han": "兴良",
+    "codepoints": [
+      "U+F373"
+    ],
+    "rule": 3
+  },
+  "maeq": {
+    "glyph": "",
+    "han": "矛万く",
+    "codepoints": [
+      "U+F0EB",
+      "U+F03B"
+    ],
+    "rule": 4
+  },
+  "yu": {
+    "glyph": "",
+    "han": "云无",
+    "codepoints": [
+      "U+F4A9"
+    ],
+    "rule": 1
+  },
+  "aoq": {
+    "glyph": "",
+    "han": "奧亡く",
+    "codepoints": [
+      "U+F297",
+      "U+F03B"
+    ],
+    "rule": 4
+  },
+  "iuq": {
+    "glyph": "",
+    "han": "奧雨く",
+    "codepoints": [
+      "U+F291",
+      "U+F03B"
+    ],
+    "rule": 4
+  }
+}

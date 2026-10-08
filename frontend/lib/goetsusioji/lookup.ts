@@ -13,34 +13,34 @@ export function lowerBoundKey(keys: string[], prefix: string): number {
   return lo;
 }
 
-function glyphsForKey(
+function candidatesForKey(
   lex: GoetsusiojiLexicon,
   syllable: string,
   out: GoetsusiojiCandidate[],
   limit: number,
   seenInPass: Set<string>
 ): void {
-  const glyphs = lex.map[syllable];
-  if (!Array.isArray(glyphs)) return;
+  const entries = lex.map[syllable];
+  if (!Array.isArray(entries)) return;
 
-  const seenInSyllable = new Set<string>();
-  for (let index = 0; index < glyphs.length && out.length < limit; index++) {
-    const glyph = glyphs[index];
-    if (typeof glyph !== "string" || !glyph.trim()) continue;
-    if (seenInSyllable.has(glyph)) continue;
-    seenInSyllable.add(glyph);
+  for (let index = 0; index < entries.length && out.length < limit; index++) {
+    const entry = entries[index];
+    const glyph = entry?.glyph ?? null;
+    const han = typeof entry?.han === "string" ? entry.han : "";
+    if (!glyph && !han) continue;
 
-    const dedupeKey = `${syllable}\0${glyph}`;
+    const dedupeKey = `${syllable}\0${glyph ?? ""}\0${han}`;
     if (seenInPass.has(dedupeKey)) continue;
     seenInPass.add(dedupeKey);
 
-    out.push({ syllable, glyph, index });
+    out.push({ syllable, glyph, han, index });
   }
 }
 
 /**
- * Prefix match on normalized syllable keys → flattened glyph candidates.
+ * Prefix match on normalized syllable keys → flattened candidates.
  * Exact key matches are listed before other prefix extensions.
+ * Includes Han-only rows (null glyph).
  */
 export function prefixCandidates(
   lex: GoetsusiojiLexicon,
@@ -54,7 +54,7 @@ export function prefixCandidates(
   const seenInPass = new Set<string>();
 
   if (lex.keySet.has(prefix)) {
-    glyphsForKey(lex, prefix, out, limit, seenInPass);
+    candidatesForKey(lex, prefix, out, limit, seenInPass);
   }
 
   const lo = lowerBoundKey(lex.keys, prefix);
@@ -62,22 +62,23 @@ export function prefixCandidates(
     const key = lex.keys[i];
     if (!key.startsWith(prefix)) break;
     if (key === prefix) continue;
-    glyphsForKey(lex, key, out, limit, seenInPass);
+    candidatesForKey(lex, key, out, limit, seenInPass);
   }
 
   return out;
 }
 
-/** Glyphs for an exact normalized syllable. */
+/** Siauzy glyphs for an exact normalized syllable (skips nulls). */
 export function exactGlyphs(lex: GoetsusiojiLexicon, buffer: string): string[] {
   const key = normalizeBuffer(buffer);
   if (!key) return [];
-  const glyphs = lex.map[key];
-  if (!Array.isArray(glyphs)) return [];
+  const entries = lex.map[key];
+  if (!Array.isArray(entries)) return [];
 
   const out: string[] = [];
   const seen = new Set<string>();
-  for (const glyph of glyphs) {
+  for (const entry of entries) {
+    const glyph = entry?.glyph;
     if (typeof glyph !== "string" || !glyph.trim()) continue;
     if (seen.has(glyph)) continue;
     seen.add(glyph);
@@ -89,4 +90,15 @@ export function exactGlyphs(lex: GoetsusiojiLexicon, buffer: string): string[] {
 /** Whether the normalized syllable is a known lexicon key. */
 export function isKnownSyllable(lex: GoetsusiojiLexicon, buffer: string): boolean {
   return lex.keySet.has(normalizeBuffer(buffer));
+}
+
+/** Whether a known syllable has at least one Siauzy glyph. */
+export function hasSiauzyGlyph(lex: GoetsusiojiLexicon, buffer: string): boolean {
+  const key = normalizeBuffer(buffer);
+  if (!key) return false;
+  const entries = lex.map[key];
+  if (!Array.isArray(entries)) return false;
+  return entries.some(
+    (e) => typeof e?.glyph === "string" && e.glyph.trim().length > 0
+  );
 }

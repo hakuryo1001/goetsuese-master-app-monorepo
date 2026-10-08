@@ -1,14 +1,24 @@
 import { buildIndexes } from "./buildIndexes";
-import type { CharactersMap, GoetsusiojiLexicon, GoetsusiojiMeta } from "./types";
+import type { CharactersMap, GoetsusiojiLexicon, GoetsusiojiMeta, SyllableOutput } from "./types";
 
 export const SYLLABLES_URL = "/goetsusioji/syllables.json";
 export const META_URL = "/goetsusioji/meta.json";
 
-/** Bump when syllables.json changes to bypass stale browser caches. */
-export const SYLLABLES_LEXICON_VERSION = "2025-06-23";
+/** Bump when syllables.json shape/content changes to bypass stale browser caches. */
+export const SYLLABLES_LEXICON_VERSION = "2026-10-08-siauzy-han";
 
 let cached: GoetsusiojiLexicon | null = null;
 let metaCached: GoetsusiojiMeta | null = null;
+
+function isSyllableOutput(item: unknown): item is SyllableOutput {
+  if (item === null || typeof item !== "object" || Array.isArray(item)) {
+    return false;
+  }
+  const o = item as Record<string, unknown>;
+  const glyphOk = o.glyph === null || typeof o.glyph === "string";
+  const hanOk = typeof o.han === "string";
+  return glyphOk && hanOk;
+}
 
 function validateMap(data: unknown): CharactersMap {
   if (data === null || typeof data !== "object" || Array.isArray(data)) {
@@ -21,11 +31,19 @@ function validateMap(data: unknown): CharactersMap {
     if (!Array.isArray(value)) {
       throw new Error(`syllables.json: value for "${key}" must be an array`);
     }
-    map[key] = value.map((item) => {
-      if (typeof item !== "string") {
-        throw new Error(`syllables.json: non-string glyph under "${key}"`);
+    map[key] = value.map((item, i) => {
+      if (!isSyllableOutput(item)) {
+        throw new Error(
+          `syllables.json: entry ${i} under "${key}" must be { glyph: string|null, han: string }`
+        );
       }
-      return item;
+      return {
+        glyph:
+          typeof item.glyph === "string" && item.glyph.trim()
+            ? item.glyph
+            : null,
+        han: item.han,
+      };
     });
   }
 

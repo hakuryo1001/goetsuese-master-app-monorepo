@@ -34,7 +34,6 @@
     "gh",
     "nk",
     "ng",
-    "zero",
     "i",
     "y",
     "u",
@@ -64,27 +63,31 @@
     "in",
     "y",
     "aon",
-    "r",
-    "-q",
-    "-n"
+    "r"
+  ],
+  "medials_order": [
+    "i",
+    "u",
+    "iu",
+    "r"
   ],
   "duplicate_compact_romanizations": [],
-  "syllable_count": 6980,
-  "source": "/Users/bon/Documents/goetsuese/goetsusioji-mapping/data/spelling-lookup.json",
-  "spelling_lookup_meta": {
-    "description": "Romanization → Goetsusioji char. Uses fused syllable glyphs from glyphs-handfill-with-chinese.json (U+F040..F4F9) when available; only splits into components for medials, compound finals, bound codas, and other chart-3 exceptions.",
-    "generated_by": "scripts/build_spelling_lookup.py",
-    "count": 6980,
-    "fused_glyph_count": 921,
+  "syllable_count": 10797,
+  "source": "/Users/bon/Documents/goetsuese/goetsusioji-mapping/mapping/goetsusioji.json",
+  "mapping_meta": {
+    "generated_by": "scripts/build.py",
     "stats": {
-      "fused_whole": 858,
-      "simple": 936,
-      "implicit_i": 105,
-      "with_medial": 3556,
-      "compound": 273,
-      "compound_medial": 1057,
-      "bound_coda": 1053,
-      "skipped": 0
-    }
+      "with_goetsu": 10061,
+      "missing_goetsu": 736,
+      "simple": 910,
+      "implicit_i": 85,
+      "with_medial": 3392,
+      "compound": 266,
+      "compound_medial": 1008,
+      "bound_coda": 5136,
+      "skipped_duplicate": 199,
+      "letter_variants": 22
+    },
+    "description": "Canonical Goetsusioji mapping: romanization → Siauzy glyph blocks + progenitor Han spelling. Generated from handfill; do not hand-edit."
   }
 }

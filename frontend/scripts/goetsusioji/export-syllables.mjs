@@ -1,21 +1,40 @@
 #!/usr/bin/env node
 /**
- * Export goetsuese-mapping.json → public/goetsusioji/syllables.json
- * for browser IME prefix lookup ({ syllable: [glyph, ...] }).
+ * Export goetsusioji-mapping → public/goetsusioji/ + lib/goetsusioji/.
+ *
+ * From mapping/goetsusioji.json:
+ *   syllables.json, meta.json, rule-examples.json, atlas.json (components/rules/tones)
+ * From mapping/siauzy-letters-to-hanzi-to-simplified.json:
+ *   letters.json (public + lib copy for static import)
+ *
+ * Lexicon shape: { [romanization]: [{ glyph: string|null, han: string }] }
  */
 
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync, mkdirSync, copyFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const FRONTEND_ROOT = resolve(__dirname, "../..");
-const DEFAULT_MAPPING = resolve(
-  FRONTEND_ROOT,
-  "../../goetsusioji-mapping/mapping/goetsuese-mapping.json"
+const MAPPING_DIR = resolve(FRONTEND_ROOT, "../../goetsusioji-mapping/mapping");
+const DEFAULT_MAPPING = join(MAPPING_DIR, "goetsusioji.json");
+const DEFAULT_LETTERS = join(
+  MAPPING_DIR,
+  "siauzy-letters-to-hanzi-to-simplified.json"
 );
-const OUT_PATH = join(FRONTEND_ROOT, "public/goetsusioji/syllables.json");
-const META_OUT = join(FRONTEND_ROOT, "public/goetsusioji/meta.json");
+
+const PUBLIC_DIR = join(FRONTEND_ROOT, "public/goetsusioji");
+const LIB_DIR = join(FRONTEND_ROOT, "lib/goetsusioji");
+
+const OUT_PATH = join(PUBLIC_DIR, "syllables.json");
+const META_OUT = join(PUBLIC_DIR, "meta.json");
+const ATLAS_PUBLIC = join(PUBLIC_DIR, "atlas.json");
+const ATLAS_LIB = join(LIB_DIR, "atlas.json");
+const LETTERS_PUBLIC = join(PUBLIC_DIR, "letters.json");
+const LETTERS_LIB = join(LIB_DIR, "letters.json");
+const RULE_EXAMPLES_OUT = join(LIB_DIR, "rule-examples.json");
+
+const RULE_EXAMPLE_KEYS = ["keq", "tiau", "shian", "maeq", "yu", "aoq", "iuq"];
 
 const ROMANIZE_ALIASES = {
   "ch(i)": "ch",
@@ -34,55 +53,133 @@ function normalizeKey(raw) {
   return ROMANIZE_ALIASES[text] ?? text;
 }
 
-function addGlyph(map, key, char) {
-  if (!key || !char || typeof char !== "string" || !char.trim()) return;
+function entryFromSyllable(syl) {
+  if (!syl || typeof syl !== "object") return null;
+  const glyphRaw = syl.goetsu;
+  const han = typeof syl.han === "string" ? syl.han : "";
+  const glyph =
+    typeof glyphRaw === "string" && glyphRaw.trim() ? glyphRaw : null;
+  if (!glyph && !han) return null;
+  return { glyph, han };
+}
+
+function sameEntry(a, b) {
+  return a.glyph === b.glyph && a.han === b.han;
+}
+
+function addEntry(map, key, entry) {
+  if (!key || !entry) return;
   if (!map[key]) map[key] = [];
-  if (!map[key].includes(char)) map[key].push(char);
+  if (!map[key].some((e) => sameEntry(e, entry))) {
+    map[key].push(entry);
+  }
+}
+
+function writeJson(path, value) {
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`, "utf8");
 }
 
 function main() {
   const mappingPath = process.env.GOETSUese_MAPPING?.trim() || DEFAULT_MAPPING;
-  const raw = readFileSync(mappingPath, "utf8");
-  const data = JSON.parse(raw);
+  const lettersPath = process.env.GOETSUese_LETTERS?.trim() || DEFAULT_LETTERS;
 
+  if (!existsSync(mappingPath)) {
+    console.warn(
+      `[goetsusioji:export] Mapping not found at ${mappingPath}; keeping committed public JSON.`
+    );
+    process.exit(0);
+  }
+
+  const data = JSON.parse(readFileSync(mappingPath, "utf8"));
+  const syllables = data.syllables ?? {};
+  const aliases = data.aliases ?? {};
   const map = {};
 
-  for (const [key, entry] of Object.entries(data.romanization ?? {})) {
-    const norm = normalizeKey(key);
-    if (!norm || !entry?.char) continue;
-    const kind = entry.kind ?? "syllable";
-    if (kind === "syllable" || kind === "grammar") {
-      addGlyph(map, norm, entry.char);
+  for (const [rawKey, syl] of Object.entries(syllables)) {
+    const key = normalizeKey(rawKey);
+    if (!key) continue;
+    // Empty-onset bare finals: chart-2 letter first, then grid syllable.
+    const letter = entryFromSyllable(syl?.letter);
+    if (letter) addEntry(map, key, letter);
+    const entry = entryFromSyllable(syl);
+    if (entry) addEntry(map, key, entry);
+  }
+
+  for (const [rawAlias, rawTarget] of Object.entries(aliases)) {
+    const alias = normalizeKey(rawAlias);
+    const target = normalizeKey(rawTarget);
+    if (!alias || !target || !map[target]) continue;
+    for (const entry of map[target]) {
+      addEntry(map, alias, entry);
     }
   }
 
-  for (const entry of Object.values(data.syllables ?? {})) {
-    const key = normalizeKey(entry?.romanization);
-    if (key && entry?.char) addGlyph(map, key, entry.char);
-  }
-
-  for (const [key, entry] of Object.entries(data.grammar ?? {})) {
-    const norm = normalizeKey(key);
-    if (norm && entry?.char) addGlyph(map, norm, entry.char);
-  }
-
-  mkdirSync(dirname(OUT_PATH), { recursive: true });
-  writeFileSync(OUT_PATH, `${JSON.stringify(map, null, 2)}\n`, "utf8");
+  writeJson(OUT_PATH, map);
 
   const meta = {
     initials_order: data.initials_order ?? [],
     finals_order: data.finals_order ?? [],
-    duplicate_compact_romanizations:
-      data.meta?.duplicate_compact_romanizations ?? [],
+    medials_order: data.medials_order ?? [],
+    duplicate_compact_romanizations: [],
     syllable_count: Object.keys(map).length,
     source: mappingPath,
+    mapping_meta: {
+      generated_by: data.meta?.generated_by ?? null,
+      stats: data.meta?.stats ?? null,
+      description: data.meta?.description ?? null,
+    },
   };
-  writeFileSync(META_OUT, `${JSON.stringify(meta, null, 2)}\n`, "utf8");
+  writeJson(META_OUT, meta);
 
-  const multi = Object.entries(map).filter(([, glyphs]) => glyphs.length > 1);
+  const atlas = {
+    components: data.components ?? {},
+    rules: data.rules ?? [],
+    tones: data.tones ?? [],
+    initials_order: data.initials_order ?? [],
+    finals_order: data.finals_order ?? [],
+    medials_order: data.medials_order ?? [],
+    source: mappingPath,
+  };
+  writeJson(ATLAS_PUBLIC, atlas);
+  writeJson(ATLAS_LIB, atlas);
+
+  const ruleExamples = {};
+  for (const key of RULE_EXAMPLE_KEYS) {
+    const syl = syllables[key];
+    if (!syl) continue;
+    ruleExamples[key] = {
+      glyph: typeof syl.goetsu === "string" ? syl.goetsu : null,
+      han: typeof syl.han === "string" ? syl.han : "",
+      codepoints: (syl.blocks ?? []).map((b) => b.codepoint).filter(Boolean),
+      rule: syl.rule ?? null,
+    };
+  }
+  writeJson(RULE_EXAMPLES_OUT, ruleExamples);
+
+  if (existsSync(lettersPath)) {
+    mkdirSync(PUBLIC_DIR, { recursive: true });
+    mkdirSync(LIB_DIR, { recursive: true });
+    copyFileSync(lettersPath, LETTERS_PUBLIC);
+    copyFileSync(lettersPath, LETTERS_LIB);
+    console.log(`Wrote ${LETTERS_PUBLIC}`);
+    console.log(`Wrote ${LETTERS_LIB}`);
+  } else {
+    console.warn(
+      `[goetsusioji:export] Letters not found at ${lettersPath}; skipping letters.json.`
+    );
+  }
+
+  const withGlyph = Object.values(map).filter((arr) =>
+    arr.some((e) => e.glyph)
+  ).length;
   console.log(`Wrote ${OUT_PATH} (${Object.keys(map).length} keys)`);
   console.log(`Wrote ${META_OUT}`);
-  console.log(`  multi-glyph keys: ${multi.length}`);
+  console.log(`Wrote ${ATLAS_PUBLIC}`);
+  console.log(`Wrote ${ATLAS_LIB}`);
+  console.log(`Wrote ${RULE_EXAMPLES_OUT}`);
+  console.log(`  with Siauzy glyph: ${withGlyph}`);
+  console.log(`  aliases expanded: ${Object.keys(aliases).length}`);
 }
 
 main();

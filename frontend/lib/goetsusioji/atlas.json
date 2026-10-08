@@ -1,0 +1,609 @@
+{
+  "components": {
+    "initials": {
+      "ph": {
+        "codepoint": "U+F500",
+        "glyph": "",
+        "han": "兵ﾟ",
+        "group": "兵"
+      },
+      "p": {
+        "codepoint": "U+F501",
+        "glyph": "",
+        "han": "兵",
+        "group": "兵"
+      },
+      "b": {
+        "codepoint": "U+F502",
+        "glyph": "",
+        "han": "兵ﾞ",
+        "group": "兵"
+      },
+      "f": {
+        "codepoint": "U+F503",
+        "glyph": "",
+        "han": "弗",
+        "group": "弗"
+      },
+      "v": {
+        "codepoint": "U+F504",
+        "glyph": "",
+        "han": "弗ﾞ",
+        "group": "弗"
+      },
+      "mh": {
+        "codepoint": "U+F540",
+        "glyph": "",
+        "han": "矛ﾟ",
+        "group": "矛"
+      },
+      "m": {
+        "codepoint": "U+F0E0",
+        "glyph": "",
+        "han": "矛",
+        "group": "矛"
+      },
+      "th": {
+        "codepoint": "U+F506",
+        "glyph": "",
+        "han": "刀ﾟ",
+        "group": "刀"
+      },
+      "t": {
+        "codepoint": "U+F507",
+        "glyph": "",
+        "han": "刀",
+        "group": "刀"
+      },
+      "d": {
+        "codepoint": "U+F508",
+        "glyph": "",
+        "han": "刀ﾞ",
+        "group": "刀"
+      },
+      "lh": {
+        "codepoint": "U+F51F",
+        "glyph": "",
+        "han": "力ﾟ",
+        "group": "力"
+      },
+      "l": {
+        "codepoint": "U+F509",
+        "glyph": "",
+        "han": "力",
+        "group": "力"
+      },
+      "ch": {
+        "codepoint": "U+F512",
+        "glyph": "",
+        "han": "斤ﾟ",
+        "group": "斤"
+      },
+      "c": {
+        "codepoint": "U+F513",
+        "glyph": "",
+        "han": "斤",
+        "group": "斤"
+      },
+      "j": {
+        "codepoint": "U+F514",
+        "glyph": "",
+        "han": "斤ﾞ",
+        "group": "斤"
+      },
+      "sh": {
+        "codepoint": "U+F515",
+        "glyph": "",
+        "han": "兴",
+        "group": "兴"
+      },
+      "zh": {
+        "codepoint": "U+F516",
+        "glyph": "",
+        "han": "兴ﾞ",
+        "group": "兴"
+      },
+      "nh": {
+        "codepoint": "U+F541",
+        "glyph": "",
+        "han": "拿ﾟ",
+        "group": "拿"
+      },
+      "n": {
+        "codepoint": "U+F50A",
+        "glyph": "",
+        "han": "拿",
+        "group": "拿"
+      },
+      "tsh": {
+        "codepoint": "U+F517",
+        "glyph": "",
+        "han": "子ﾟ",
+        "group": "子"
+      },
+      "ts": {
+        "codepoint": "U+F518",
+        "glyph": "",
+        "han": "子",
+        "group": "子"
+      },
+      "dz": {
+        "codepoint": "U+F519",
+        "glyph": "",
+        "han": "子ﾞ",
+        "group": "子"
+      },
+      "s": {
+        "codepoint": "U+F51A",
+        "glyph": "",
+        "han": "式",
+        "group": "式"
+      },
+      "z": {
+        "codepoint": "U+F51B",
+        "glyph": "",
+        "han": "式ﾞ",
+        "group": "式"
+      },
+      "nyh": {
+        "codepoint": "U+F543",
+        "glyph": "",
+        "han": "女ﾟ",
+        "group": "女"
+      },
+      "ny": {
+        "codepoint": "U+F51C",
+        "glyph": "",
+        "han": "女",
+        "group": "女"
+      },
+      "kh": {
+        "codepoint": "U+F50B",
+        "glyph": "",
+        "han": "工ﾟ",
+        "group": "工"
+      },
+      "k": {
+        "codepoint": "U+F50C",
+        "glyph": "",
+        "han": "工",
+        "group": "工"
+      },
+      "g": {
+        "codepoint": "U+F50D",
+        "glyph": "",
+        "han": "工ﾞ",
+        "group": "工"
+      },
+      "h": {
+        "codepoint": "U+F50E",
+        "glyph": "",
+        "han": "奧ﾟ",
+        "group": "奥"
+      },
+      "null": {
+        "codepoint": "U+F280",
+        "glyph": "",
+        "han": "奧",
+        "group": "奥"
+      },
+      "gh": {
+        "codepoint": "U+F510",
+        "glyph": "",
+        "han": "奧ﾞ",
+        "group": "奥"
+      },
+      "nk": {
+        "codepoint": "U+F542",
+        "glyph": "",
+        "han": "午ﾟ",
+        "group": "午"
+      },
+      "ng": {
+        "codepoint": "U+F511",
+        "glyph": "",
+        "han": "午",
+        "group": "午"
+      },
+      "zero": {
+        "codepoint": "U+F50F",
+        "glyph": "",
+        "han": "奧",
+        "group": "零聲母"
+      },
+      "i": {
+        "codepoint": "U+F51D",
+        "glyph": "",
+        "han": "云",
+        "group": "云"
+      },
+      "y": {
+        "codepoint": "U+F544",
+        "glyph": "",
+        "han": "云",
+        "group": "云"
+      },
+      "u": {
+        "codepoint": "U+F51E",
+        "glyph": "",
+        "han": "危",
+        "group": "危"
+      },
+      "w": {
+        "codepoint": "U+F545",
+        "glyph": "",
+        "han": "危",
+        "group": "危"
+      }
+    },
+    "finals": {
+      "a": {
+        "codepoint": "U+F521",
+        "glyph": "",
+        "han": "派"
+      },
+      "o": {
+        "codepoint": "U+F523",
+        "glyph": "",
+        "han": "瓦"
+      },
+      "e": {
+        "codepoint": "U+F525",
+        "glyph": "",
+        "han": "卑"
+      },
+      "i": {
+        "codepoint": "U+F51D",
+        "glyph": "",
+        "han": "以"
+      },
+      "u": {
+        "codepoint": "U+F51E",
+        "glyph": "",
+        "han": "无"
+      },
+      "au": {
+        "codepoint": "U+F52E",
+        "glyph": "",
+        "han": "号"
+      },
+      "ou": {
+        "codepoint": "U+F52F",
+        "glyph": "",
+        "han": "多"
+      },
+      "eu": {
+        "codepoint": "U+F530",
+        "glyph": "",
+        "han": "久"
+      },
+      "iu": {
+        "codepoint": "U+F531",
+        "glyph": "",
+        "han": "雨"
+      },
+      "aq": {
+        "codepoint": "U+F522",
+        "glyph": "",
+        "han": "乏"
+      },
+      "oq": {
+        "codepoint": "U+F524",
+        "glyph": "",
+        "han": "昱"
+      },
+      "eq": {
+        "codepoint": "U+F526",
+        "glyph": "",
+        "han": "出"
+      },
+      "iq": {
+        "codepoint": "U+F528",
+        "glyph": "",
+        "han": "亦"
+      },
+      "ae": {
+        "codepoint": "U+F52B",
+        "glyph": "",
+        "han": "万"
+      },
+      "oe": {
+        "codepoint": "U+F532",
+        "glyph": "",
+        "han": "寒"
+      },
+      "en": {
+        "codepoint": "U+F535",
+        "glyph": "",
+        "han": "文"
+      },
+      "ie": {
+        "codepoint": "U+F52D",
+        "glyph": "",
+        "han": "建"
+      },
+      "an": {
+        "codepoint": "U+F533",
+        "glyph": "",
+        "han": "良"
+      },
+      "on": {
+        "codepoint": "U+F534",
+        "glyph": "",
+        "han": "从"
+      },
+      "eon": {
+        "codepoint": "U+F538",
+        "glyph": "",
+        "han": "能"
+      },
+      "in": {
+        "codepoint": "U+F536",
+        "glyph": "",
+        "han": "刃"
+      },
+      "y": {
+        "codepoint": "U+F544",
+        "glyph": "",
+        "han": "厶"
+      },
+      "aon": {
+        "codepoint": "U+F537",
+        "glyph": "",
+        "han": "亡"
+      },
+      "r": {
+        "codepoint": "U+F539",
+        "glyph": "",
+        "han": "而"
+      }
+    },
+    "medials": {
+      "i": {
+        "codepoint": "U+F51D",
+        "glyph": "",
+        "han": "以",
+        "label": "齊齒呼"
+      },
+      "u": {
+        "codepoint": "U+F51E",
+        "glyph": "",
+        "han": "无",
+        "label": "合口呼"
+      },
+      "iu": {
+        "codepoint": "U+F531",
+        "glyph": "",
+        "han": "雨",
+        "label": "撮口呼"
+      },
+      "r": {
+        "codepoint": "U+F539",
+        "glyph": "",
+        "han": "而",
+        "label": "翹舌"
+      }
+    },
+    "codas": {
+      "-q": {
+        "codepoint": "U+F03B",
+        "glyph": "",
+        "han": "く"
+      },
+      "-n": {
+        "codepoint": "U+F03A",
+        "glyph": "",
+        "han": "レ"
+      }
+    }
+  },
+  "rules": [
+    {
+      "id": 1,
+      "name": "simple",
+      "layout": {
+        "top": "initial",
+        "bottom": "final"
+      },
+      "zh": "聲母符號和韻母符號拼合起來就可以表達一個字音，拼寫時聲母在上，韻母在下。",
+      "example": {
+        "romanization": "keq",
+        "hanzi": "個"
+      }
+    },
+    {
+      "id": 2,
+      "name": "with_medial",
+      "layout": {
+        "top": "initial",
+        "below": "medial",
+        "beside": "final"
+      },
+      "zh": "拼寫時聲母在上，介母在其下，韻母在介母之右。",
+      "example": {
+        "romanization": "tiau",
+        "hanzi": "鳥"
+      }
+    },
+    {
+      "id": 3,
+      "name": "implicit_i",
+      "layout": {
+        "top": "initial",
+        "bottom": "final"
+      },
+      "zh": "ch(i)、c(i)、j(i) 和 sh(i)、zh(i) 視為已含介母 i，因此不用再標出介音 i。",
+      "example": {
+        "romanization": "shian",
+        "hanzi": "向"
+      },
+      "implicit_i_initials": [
+        "ch",
+        "c",
+        "j",
+        "sh",
+        "zh"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "compound_final",
+      "layout": {
+        "top": "initial",
+        "bottom": "final_part_1",
+        "beside": "final_part_2"
+      },
+      "zh": "aeq、oeq、eoq、ai、ei 等有專門寫法（下+右布局），同時按照介音字的方式進行拼寫。",
+      "example": {
+        "romanization": "maeq",
+        "hanzi": "襪"
+      },
+      "compound_finals": {
+        "aeq": [
+          "ae",
+          "-q"
+        ],
+        "oeq": [
+          "oe",
+          "-q"
+        ],
+        "eoq": [
+          "eon",
+          "-q"
+        ],
+        "ai": [
+          "a",
+          "i"
+        ],
+        "ei": [
+          "e",
+          "i"
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "name": "yu",
+      "layout": {
+        "top": "initial",
+        "bottom": "final"
+      },
+      "zh": "由於目前撮口音 iu 基本上不區分尖團，所以不再單獨設立 yu 韻母；如需表記，用 y+u（grid yu）。",
+      "example": {
+        "romanization": "yu",
+        "hanzi": null
+      }
+    }
+  ],
+  "tones": [
+    {
+      "category": "平",
+      "mark": "-",
+      "key": "ping",
+      "note": "level; often unmarked"
+    },
+    {
+      "category": "上",
+      "mark": "'",
+      "key": "shang",
+      "note": "rising"
+    },
+    {
+      "category": "去",
+      "mark": "`",
+      "key": "qu",
+      "note": "departing"
+    },
+    {
+      "category": "入",
+      "mark": "-q",
+      "key": "ru",
+      "note": "entering; expressed via checked final / coda"
+    },
+    {
+      "category": "变调",
+      "mark": "-x",
+      "key": "sandhi",
+      "note": "sandhi; glyph U+F03C (へ) tentatively"
+    },
+    {
+      "category": "变调",
+      "mark": "-·",
+      "key": "sandhi-dot",
+      "note": "sandhi middle dot; glyph U+F03D (ケ) tentatively"
+    }
+  ],
+  "initials_order": [
+    "ph",
+    "p",
+    "b",
+    "f",
+    "v",
+    "mh",
+    "m",
+    "th",
+    "t",
+    "d",
+    "lh",
+    "l",
+    "ch",
+    "c",
+    "j",
+    "sh",
+    "zh",
+    "nh",
+    "n",
+    "tsh",
+    "ts",
+    "dz",
+    "s",
+    "z",
+    "nyh",
+    "ny",
+    "kh",
+    "k",
+    "g",
+    "h",
+    "null",
+    "gh",
+    "nk",
+    "ng",
+    "i",
+    "y",
+    "u",
+    "w"
+  ],
+  "finals_order": [
+    "a",
+    "o",
+    "e",
+    "i",
+    "u",
+    "au",
+    "ou",
+    "eu",
+    "iu",
+    "aq",
+    "oq",
+    "eq",
+    "iq",
+    "ae",
+    "oe",
+    "en",
+    "ie",
+    "an",
+    "on",
+    "eon",
+    "in",
+    "y",
+    "aon",
+    "r"
+  ],
+  "medials_order": [
+    "i",
+    "u",
+    "iu",
+    "r"
+  ],
+  "source": "/Users/bon/Documents/goetsuese/goetsusioji-mapping/mapping/goetsusioji.json"
+}
